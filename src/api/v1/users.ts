@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../../config/connectDB";
 import { users, user_permission } from "../../schema/users";
 import express, { Request, Response } from "express";
+import crypto from "crypto";
 
 const route = express.Router();
 
@@ -12,16 +13,6 @@ route.get("/users", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).json({ error: "Error fetching users", message: error });
-  }
-});
-
-route.post("/users", async (req: Request, res: Response) => {
-  try {
-    await db.insert(users).values(req.body).execute();
-    res.status(201).json({ message: "User created" });
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ error: "Error creating user", message: error });
   }
 });
 

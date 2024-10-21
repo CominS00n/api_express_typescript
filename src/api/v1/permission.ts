@@ -1,9 +1,9 @@
 import { db } from "../../config/connectDB";
 import { permission } from "../../schema/permission";
-import express, { Request, Response } from "express";
+import { Request, Response, Router } from "express";
 import { eq } from "drizzle-orm";
 
-const route = express.Router();
+const route = Router();
 
 route.get("/permissions", async (req: Request, res: Response) => {
   try {
