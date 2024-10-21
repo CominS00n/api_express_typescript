@@ -1,16 +1,16 @@
-import { db } from "./src/config/connectDB";
+import { db } from "./config/connectDB";
 import {
   createUsersTable,
   dropUsersTable,
-} from "./src/migrations/20241021_create_users_table";
+} from "./migrations/20241021_create_users_table";
 import {
   createPermissionTable,
   dropPermissionTable,
-} from "./src/migrations/20241021_create_permission_table";
+} from "./migrations/20241021_create_permission_table";
 import {
   createUserPermissionTable,
   dropUserPermissionTable,
-} from "./src/migrations/20241021_create_user_permission";
+} from "./migrations/20241021_create_user_permission";
 
 const migrations = [
   { up: createUsersTable, down: dropUsersTable },
