@@ -1,8 +1,11 @@
-import express from "express";
+import { Router } from "express";
 import permission from "./permission";
 import users from "./users";
 import login from "./login";
+import log_activity from "./log_activity";
 
-const route = express.Router();
+const route = Router();
 
-export const v1 = route.use("/v1", [users, permission, login]);
+route.use("/", [users, permission, login, log_activity]);
+
+export default route;

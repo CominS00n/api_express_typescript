@@ -1,14 +1,32 @@
+import express, { Request, Response } from "express";
 import { eq } from "drizzle-orm";
+
 import { db } from "../../config/connectDB";
 import { users, user_permission } from "../../schema/users";
-import express, { Request, Response } from "express";
-import crypto from "crypto";
+import { permission } from "../../schema/permission";
+
+import { authenticateToken } from "../../middleware/authenticateToken";
+import logActivity, { LogActivity } from "../../middleware/createLog";
 
 const route = express.Router();
 
-route.get("/users", async (req: Request, res: Response) => {
+route.get("/users", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const allUsers = await db.select().from(users).execute();
+    const allUsers = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        username: users.username,
+        email: users.email,
+      })
+      .from(users)
+      .execute();
+    let logData: LogActivity = {
+      activityUser: req.cookies.user.name,
+      activityDetails: "Users fetched",
+      activityDate: new Date().toISOString(),
+    };
+    await logActivity(logData);
     res.json(allUsers);
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -16,46 +34,88 @@ route.get("/users", async (req: Request, res: Response) => {
   }
 });
 
-route.get("/users/:id", async (req: Request, res: Response) => {
-  try {
-    const id: number = parseInt(req.params.id);
-    const user = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, id))
-      .execute();
-    res.json({ message: "User found", data: user, status: 200 });
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    res.status(500).json({ error: "Error fetching user", message: error });
+route.get(
+  "/users/:id",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    try {
+      const id: number = parseInt(req.params.id);
+      const user = await db
+        .select({
+          id: users.id,
+          name: users.name,
+          username: users.username,
+          email: users.email,
+        })
+        .from(users)
+        .where(eq(users.id, id))
+        .execute();
+      let logData: LogActivity = {
+        activityUser: req.cookies.user.name,
+        activityDetails: "Users fetched",
+        activityDate: new Date().toISOString(),
+      };
+      await logActivity(logData);
+      res.json({ message: "User found", data: user, status: 200 });
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ error: "Error fetching user", message: error });
+    }
   }
-});
+);
 
 // user permission routes
-route.get("/user_permissions", async (req: Request, res: Response) => {
-  try {
-    const allUserPermissions = await db
-      .select()
-      .from(user_permission)
-      .execute();
-    res.json(allUserPermissions);
-  } catch (error) {
-    console.error("Error fetching user permissions:", error);
-    res
-      .status(500)
-      .json({ error: "Error fetching user permissions", message: error });
+route.get(
+  "/user_permissions",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    try {
+      const allUserPermissions = await db
+        .select({
+          id: user_permission.id,
+          username: users.username,
+          permission: permission.name,
+        })
+        .from(user_permission)
+        .innerJoin(users, eq(user_permission.user_id, users.id))
+        .innerJoin(permission, eq(user_permission.permission_id, permission.id))
+        .execute();
+      let logData: LogActivity = {
+        activityUser: req.cookies.user.name,
+        activityDetails: "User permissions fetched",
+        activityDate: new Date().toISOString(),
+      };
+      await logActivity(logData);
+      res.json(allUserPermissions);
+    } catch (error) {
+      console.error("Error fetching user permissions:", error);
+      res
+        .status(500)
+        .json({ error: "Error fetching user permissions", message: error });
+    }
   }
-});
-route.post("/user_permissions", async (req: Request, res: Response) => {
-  try {
-    await db.insert(user_permission).values(req.body).execute();
-    res.status(201).json({ message: "User permission created" });
-  } catch (error) {
-    console.error("Error creating user permission:", error);
-    res
-      .status(500)
-      .json({ error: "Error creating user permission", message: error });
+);
+route.post(
+  "/user_permissions",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    try {
+      await db.insert(user_permission).values(req.body).execute();
+      // get username from cookie
+      const logData: LogActivity = {
+        activityUser: req.cookies.user.name,
+        activityDetails: "User permission created",
+        activityDate: new Date().toISOString(),
+      };
+      await logActivity(logData);
+      res.status(201).json({ message: "User permission created", logData });
+    } catch (error) {
+      console.error("Error creating user permission:", error);
+      res
+        .status(500)
+        .json({ error: "Error creating user permission", message: error });
+    }
   }
-});
+);
 
 export default route;
