@@ -33,7 +33,6 @@ route.get("/users", authenticateToken, async (req: Request, res: Response) => {
     res.status(500).json({ error: "Error fetching users", message: error });
   }
 });
-
 route.get(
   "/users/:id",
   authenticateToken,
@@ -60,6 +59,26 @@ route.get(
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ error: "Error fetching user", message: error });
+    }
+  }
+);
+route.delete(
+  "/users/:id",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    try {
+      const id: number = parseInt(req.params.id);
+      await db.delete(users).where(eq(users.id, id)).execute();
+      let logData: LogActivity = {
+        activityUser: req.cookies.user.name,
+        activityDetails: "User deleted",
+        activityDate: new Date().toISOString(),
+      };
+      await logActivity(logData);
+      res.json({ message: "User deleted", logData });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ error: "Error deleting user", message: error });
     }
   }
 );
@@ -114,6 +133,33 @@ route.post(
       res
         .status(500)
         .json({ error: "Error creating user permission", message: error });
+    }
+  }
+);
+route.delete(
+  "/user_permissions/:id",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    try {
+      const id: number = parseInt(req.params.id);
+      await db
+        .delete(user_permission)
+        .where(eq(user_permission.id, id))
+        .execute();
+
+      const logData: LogActivity = {
+        activityUser: req.cookies.user.name,
+        activityDetails: "User permission deleted",
+        activityDate: new Date().toISOString(),
+      };
+
+      await logActivity(logData);
+      res.json({ message: "User permission deleted" });
+    } catch (error) {
+      console.error("Error deleting user permission:", error);
+      res
+        .status(500)
+        .json({ error: "Error deleting user permission", message: error });
     }
   }
 );

@@ -1,10 +1,11 @@
 import { Router, Request, Response } from "express";
+import { eq } from "drizzle-orm";
 
 import { db } from "../../config/connectDB";
 import { account_request } from "../../schema/account_request";
 
+import { authenticateToken } from "../../middleware/authenticateToken";
 import logActivity, { LogActivity } from "../../middleware/createLog";
-import { eq } from "drizzle-orm";
 
 const router = Router();
 
@@ -32,8 +33,7 @@ router.post("/account_request", async (req: Request, res: Response) => {
       activityDate: new Date().toISOString(),
     };
 
-    logActivity(logData);
-
+    await logActivity(logData);
     res.status(200).json({ message: "Account request created" });
   } catch (error) {
     console.error("Error creating account_request:", error);
@@ -43,20 +43,32 @@ router.post("/account_request", async (req: Request, res: Response) => {
   }
 });
 
-router.delete("/account_request/:id", async (req: Request, res: Response) => {
-  try {
-    const id: number = parseInt(req.params.id);
-    await db
-      .delete(account_request)
-      .where(eq(account_request.id, id))
-      .execute();
-    res.status(200).json({ message: "Account request deleted" });
-  } catch (error) {
-    console.error("Error deleting account_request:", error);
-    res
-      .status(500)
-      .json({ error: "Error deleting account_request", message: error });
+router.delete(
+  "/account_request/:id",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    try {
+      const id: number = parseInt(req.params.id);
+      await db
+        .delete(account_request)
+        .where(eq(account_request.id, id))
+        .execute();
+
+      const logData: LogActivity = {
+        activityUser: req.cookies.user.name,
+        activityDetails: "Account request deleted",
+        activityDate: new Date().toISOString(),
+      };
+
+      await logActivity(logData);
+      res.status(200).json({ message: "Account request deleted" });
+    } catch (error) {
+      console.error("Error deleting account_request:", error);
+      res
+        .status(500)
+        .json({ error: "Error deleting account_request", message: error });
+    }
   }
-});
+);
 
 export default router;

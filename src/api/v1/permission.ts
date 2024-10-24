@@ -33,7 +33,6 @@ route.get(
     }
   }
 );
-
 route.get(
   "/permissions/:id",
   authenticateToken,
@@ -63,7 +62,6 @@ route.get(
     }
   }
 );
-
 route.post(
   "/permissions",
   authenticateToken,
