@@ -15,6 +15,10 @@ import {
   createLogActivityTable,
   dropLogActivityTable,
 } from "../migrations/20241022_create_log_activity";
+import {
+  createAccountRequestTable,
+  dropAccountRequestTable,
+} from "../migrations/20241024_create_acccount_request_table";
 
 const migrations = [
   { up: createUsersTable, down: dropUsersTable },
@@ -24,6 +28,7 @@ const migrations = [
     down: dropUserPermissionTable,
   },
   { up: createLogActivityTable, down: dropLogActivityTable },
+  { up: createAccountRequestTable, down: dropAccountRequestTable },
 ];
 
 const runMigrations = async () => {

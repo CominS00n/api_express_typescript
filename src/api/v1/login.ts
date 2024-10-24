@@ -21,10 +21,7 @@ route.post("/login", async (req: Request, res: Response) => {
       .execute();
     const result = user[0];
 
-    console.log("result", result);
-
     const match = await bcrypt.compare(password, result.password);
-    console.log("match", match);
     if (!match) {
       res.status(400).json({ error: "Invalid user or password" });
     } else {
@@ -57,7 +54,6 @@ route.post("/register", async (req: Request, res: Response) => {
   try {
     const { username, password, name, email } = req.body;
     const hashedPassword: string = await bcrypt.hash(password, 10);
-    console.log("hashedPassword", hashedPassword);
     const data = {
       username,
       password: hashedPassword,
