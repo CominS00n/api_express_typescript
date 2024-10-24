@@ -19,6 +19,10 @@ import {
   createAccountRequestTable,
   dropAccountRequestTable,
 } from "../migrations/20241024_create_acccount_request_table";
+import {
+  createApprovedTable,
+  dropApprovedTable,
+} from "../migrations/20241024_create_approved_table";
 
 const migrations = [
   { up: createUsersTable, down: dropUsersTable },
@@ -29,10 +33,18 @@ const migrations = [
   },
   { up: createLogActivityTable, down: dropLogActivityTable },
   { up: createAccountRequestTable, down: dropAccountRequestTable },
+  { up: createApprovedTable, down: dropApprovedTable },
 ];
 
 const runMigrations = async () => {
   console.log("Starting migrations...");
+  try {
+    await db.execute(`CREATE TYPE req_type AS ENUM ( 'New Account', 'Terminate', 'Reset Password', 'Change' );`);
+    await db.execute(`CREATE TYPE account_type AS ENUM ( 'Permanent', 'Temporary' );`);
+    await db.execute(`CREATE TYPE status AS ENUM ( 'Pending', 'Approved', 'Rejected' );`);
+  } catch (error) {
+    console.info(`EXISTS types`);
+  }
 
   for (const migration of migrations) {
     try {

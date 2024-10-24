@@ -4,6 +4,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.ts",
     "migrate": "ts-node src/db/migrate.ts",
     "rollback": "ts-node src/db/rollback.ts"
   },

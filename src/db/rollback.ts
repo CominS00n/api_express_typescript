@@ -19,6 +19,10 @@ import {
   createAccountRequestTable,
   dropAccountRequestTable,
 } from "../migrations/20241024_create_acccount_request_table";
+import {
+  createApprovedTable,
+  dropApprovedTable,
+} from "../migrations/20241024_create_approved_table";
 
 const migrations = [
   { up: createUsersTable, down: dropUsersTable },
@@ -29,6 +33,7 @@ const migrations = [
   },
   { up: createLogActivityTable, down: dropLogActivityTable },
   { up: createAccountRequestTable, down: dropAccountRequestTable },
+  { up: createApprovedTable, down: dropApprovedTable },
 ];
 
 const runRollback = async () => {
@@ -45,6 +50,10 @@ const runRollback = async () => {
       console.error(`Not found table: ${migration.down.name}`);
     }
   }
+
+  await db.execute(`DROP TYPE IF EXISTS req_type;`);
+  await db.execute(`DROP TYPE IF EXISTS account_type;`);
+  await db.execute(`DROP TYPE IF EXISTS status;`)
 
   console.log("Migrations completed.");
 };
