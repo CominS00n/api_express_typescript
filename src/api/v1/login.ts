@@ -8,6 +8,7 @@ import { users } from "../../schema/users";
 import logActivity, { LogActivity } from "../../middleware/createLog";
 
 const route = express.Router();
+const ageCookie = 1000 * 60 * 60 * 5; // 5 hours
 
 route.post("/login", async (req: Request, res: Response) => {
   try {
@@ -28,7 +29,7 @@ route.post("/login", async (req: Request, res: Response) => {
       const token = jwt.sign(
         { username: result.username, name: result.name },
         "supersecret",
-        { expiresIn: "1h" }
+        { expiresIn: "5h" }
       );
       let logData: LogActivity = {
         activityUser: result.name,
@@ -37,7 +38,7 @@ route.post("/login", async (req: Request, res: Response) => {
       };
       await logActivity(logData);
       res.cookie("token", token, {
-        maxAge: 60 * 60 * 60, // 1 hour
+        maxAge: ageCookie,
         secure: true,
         httpOnly: true,
         sameSite: "none",
