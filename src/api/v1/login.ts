@@ -12,6 +12,7 @@ const ageCookie = 1000 * 60 * 60 * 5; // 5 hours
 
 route.post("/login", async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const { username, password } = req.body;
 
     const user = await db

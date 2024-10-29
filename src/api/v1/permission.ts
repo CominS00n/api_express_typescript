@@ -18,12 +18,12 @@ route.get(
       if (allPermissions.length === 0) {
         res.status(404).json({ error: "No permissions found" });
       }
-      let logData: LogActivity = {
-        activityUser: req.cookies.user.name,
-        activityDetails: "Permissions fetched",
-        activityDate: new Date().toISOString(),
-      };
-      await logActivity(logData);
+      // let logData: LogActivity = {
+      //   activityUser: req.cookies.user.name,
+      //   activityDetails: "Permissions fetched",
+      //   activityDate: new Date().toISOString(),
+      // };
+      // await logActivity(logData);
       res.json(allPermissions);
     } catch (error) {
       console.error("Error fetching permissions:", error);
@@ -47,12 +47,12 @@ route.get(
       if (permissionFound.length === 0) {
         res.status(404).json({ error: "Permission not found" });
       }
-      let logData: LogActivity = {
-        activityUser: req.cookies.user.name,
-        activityDetails: "Permission fetched",
-        activityDate: new Date().toISOString(),
-      };
-      await logActivity(logData);
+      // let logData: LogActivity = {
+      //   activityUser: req.cookies.user.name,
+      //   activityDetails: "Permission fetched",
+      //   activityDate: new Date().toISOString(),
+      // };
+      // await logActivity(logData);
       res.json({ message: "Permission found", data: permissionFound });
     } catch (error) {
       console.error("Error fetching permission:", error);

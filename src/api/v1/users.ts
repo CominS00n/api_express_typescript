@@ -21,13 +21,13 @@ route.get("/users", authenticateToken, async (req: Request, res: Response) => {
       })
       .from(users)
       .execute();
-    let logData: LogActivity = {
-      activityUser: req.cookies.user.name,
-      activityDetails: "Users fetched",
-      activityDate: new Date().toISOString(),
-    };
-    await logActivity(logData);
-    res.json(allUsers);
+    // let logData: LogActivity = {
+    //   activityUser: req.cookies.user.name,
+    //   activityDetails: "Users fetched",
+    //   activityDate: new Date().toISOString(),
+    // };
+    // await logActivity(logData);
+    res.json({data: allUsers, status: 200});
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).json({ error: "Error fetching users", message: error });
@@ -49,12 +49,12 @@ route.get(
         .from(users)
         .where(eq(users.id, id))
         .execute();
-      let logData: LogActivity = {
-        activityUser: req.cookies.user.name,
-        activityDetails: "Users fetched",
-        activityDate: new Date().toISOString(),
-      };
-      await logActivity(logData);
+      // let logData: LogActivity = {
+      //   activityUser: req.cookies.user.name,
+      //   activityDetails: "Users fetched",
+      //   activityDate: new Date().toISOString(),
+      // };
+      // await logActivity(logData);
       res.json({ message: "User found", data: user, status: 200 });
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -99,12 +99,12 @@ route.get(
         .innerJoin(users, eq(user_permission.user_id, users.id))
         .innerJoin(permission, eq(user_permission.permission_id, permission.id))
         .execute();
-      let logData: LogActivity = {
-        activityUser: req.cookies.user.name,
-        activityDetails: "User permissions fetched",
-        activityDate: new Date().toISOString(),
-      };
-      await logActivity(logData);
+      // let logData: LogActivity = {
+      //   activityUser: req.cookies.user.name,
+      //   activityDetails: "User permissions fetched",
+      //   activityDate: new Date().toISOString(),
+      // };
+      // await logActivity(logData);
       res.json(allUserPermissions);
     } catch (error) {
       console.error("Error fetching user permissions:", error);

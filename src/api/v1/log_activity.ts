@@ -8,10 +8,12 @@ import { authenticateToken } from "../../middleware/authenticateToken";
 const route = Router();
 
 route.get(
-  "/log_activity", authenticateToken, async (req: Request, res: Response) => {
+  "/log_activity",
+  authenticateToken,
+  async (req: Request, res: Response) => {
     try {
       const activities = await db.select().from(log_activity).execute();
-      res.status(200).json(activities);
+      res.json({ data: activities, status: 200 });
     } catch (error) {
       console.error("Error getting activities:", error);
       res
