@@ -4,11 +4,10 @@ export default defineConfig({
   schema: "./src/schema/*",
   out: "./drizzle",
   dbCredentials: {
-    url: "postgres://sitthichai:admin1234@localhost:5435/rct_account",
+    url: process.env.DATABASE_URL ?? "",
   },
   migrations: {
-    table: '__drizzle_migrations', // `__drizzle_migrations` by default
-    schema: 'drizzle', // used in PostgreSQL only, `drizzle` by default
+    table: "__drizzle_migrations", // `__drizzle_migrations` by default
+    schema: "drizzle", // used in PostgreSQL only, `drizzle` by default
   },
-
 });
