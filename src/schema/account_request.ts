@@ -5,18 +5,9 @@ import {
   varchar,
   date,
   timestamp,
-  pgEnum,
 } from "drizzle-orm/pg-core";
 
-// Enumerated types
-const req_type = pgEnum("req_type", [
-  "New Account",
-  "Terminate",
-  "Reset Password",
-  "Change",
-]);
-const account_type = pgEnum("account_type", ["Permanent", "Temporary"]);
-const status = pgEnum("status", ["Pending", "Approved", "Rejected"]);
+import { account_type, req_type, status } from "./after_create";
 
 // Define the table schema
 export const account_request = pgTable("account_request", {

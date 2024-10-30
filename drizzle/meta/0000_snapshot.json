@@ -1,5 +1,5 @@
 {
-  "id": "747429ce-054a-46b6-8c84-be5b4d1b5802",
+  "id": "207f388f-c817-4a48-8a29-67783913b78f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -432,7 +432,35 @@
       "checkConstraints": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "public.account_type": {
+      "name": "account_type",
+      "schema": "public",
+      "values": [
+        "Permanent",
+        "Temporary"
+      ]
+    },
+    "public.req_type": {
+      "name": "req_type",
+      "schema": "public",
+      "values": [
+        "New Account",
+        "Terminate",
+        "Reset Password",
+        "Change"
+      ]
+    },
+    "public.status": {
+      "name": "status",
+      "schema": "public",
+      "values": [
+        "Pending",
+        "Approved",
+        "Rejected"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "views": {},
