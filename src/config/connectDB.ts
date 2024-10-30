@@ -8,6 +8,12 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-console.log(pool);
+pool.query("SELECT NOW()", (err, res) => {
+  if (err) {
+    console.error("Error: ", err);
+  } else {
+    console.log("Connected to the database");
+  }
+});
 
 export const db = drizzle(pool);

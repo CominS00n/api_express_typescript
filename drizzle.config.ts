@@ -4,7 +4,7 @@ export default defineConfig({
   schema: "./src/schema/*",
   out: "./drizzle",
   dbCredentials: {
-    url: "postgres://sitthichai:admin1234@localhost:5432/rct_account",
+    url: "postgres://sitthichai:admin1234@localhost:5435/rct_account",
   },
   migrations: {
     table: '__drizzle_migrations', // `__drizzle_migrations` by default

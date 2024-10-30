@@ -1,3 +1,24 @@
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'req_type') THEN
+        CREATE TYPE "req_type" AS ENUM ('New Account', 'Terminate', 'Reset Password', 'Change');
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'status') THEN
+		CREATE TYPE "status" AS ENUM ('Pending', 'Approved', 'Rejected');
+	END IF;
+END $$;
+
+DO $$
+BEGIN
+	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'account_type') THEN
+		CREATE TYPE "account_type" AS ENUM ('Permanent', 'Temporary');
+	END IF;
+END $$;
+
 CREATE TABLE IF NOT EXISTS "account_request" (
     "id" serial PRIMARY KEY NOT NULL,
     "full_name" varchar(100) NOT NULL,
@@ -65,27 +86,6 @@ CREATE TABLE IF NOT EXISTS "users" (
     "created_at" timestamp DEFAULT now(),
     "updated_at" timestamp DEFAULT now()
 );
---> statement-breakpoint
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'req_type') THEN
-        CREATE TYPE "req_type" AS ENUM ('New Account', 'Terminate', 'Reset Password', 'Change');
-    END IF;
-END $$;
-
-DO $$
-BEGIN
-	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'status') THEN
-		CREATE TYPE "status" AS ENUM ('Pending', 'Approved', 'Rejected');
-	END IF;
-END $$;
-
-DO $$
-BEGIN
-	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'account_type') THEN
-		CREATE TYPE "account_type" AS ENUM ('Permanent', 'Temporary');
-	END IF;
-END $$;
 
 DO $$ BEGIN
  ALTER TABLE "approved" ADD CONSTRAINT "approved_account_request_id_account_request_id_fk" FOREIGN KEY ("account_request_id") REFERENCES "public"."account_request"("id") ON DELETE no action ON UPDATE no action;
