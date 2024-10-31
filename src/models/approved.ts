@@ -1,7 +1,7 @@
 import { pgTable, serial, varchar, date, timestamp } from "drizzle-orm/pg-core";
 import { account_request } from "./account_request";
 
-import { status } from "./after_create";
+import { status } from "./create_types";
 
 export const approved = pgTable("approved", {
   id: serial("id").primaryKey(),

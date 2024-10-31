@@ -7,7 +7,7 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
-import { account_type, req_type, status } from "./after_create";
+import { account_type, req_type, status } from "./create_types";
 
 // Define the table schema
 export const account_request = pgTable("account_request", {
