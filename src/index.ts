@@ -29,7 +29,7 @@ app.use(
   })
 );
 
-app.use("/api/v1", route);
+app.use("/api/v2", route);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
