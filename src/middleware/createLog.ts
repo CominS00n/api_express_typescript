@@ -1,5 +1,5 @@
 import { db } from "../config/connectDB";
-import { log_activity } from "../schema/log_activity";
+import { log_activity } from "../models/log_activity";
 
 export type LogActivity = {
   activityUser: string;

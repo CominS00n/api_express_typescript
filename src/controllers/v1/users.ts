@@ -2,8 +2,8 @@ import express, { Request, Response } from "express";
 import { eq } from "drizzle-orm";
 
 import { db } from "../../config/connectDB";
-import { users, user_permission } from "../../schema/users";
-import { permission } from "../../schema/permission";
+import { users, user_permission } from "../../models/users";
+import { permission } from "../../models/permission";
 
 import { authenticateToken } from "../../middleware/authenticateToken";
 import logActivity, { LogActivity } from "../../middleware/createLog";

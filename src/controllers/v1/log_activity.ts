@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 
 import { db } from "../../config/connectDB";
-import { log_activity } from "../../schema/log_activity";
+import { log_activity } from "../../models/log_activity";
 
 import { authenticateToken } from "../../middleware/authenticateToken";
 

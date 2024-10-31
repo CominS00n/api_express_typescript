@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 
-import route from "./api/v1/route";
+import route from "./route";
 
 dotenv.config();
 

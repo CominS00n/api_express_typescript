@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { db } from "../../config/connectDB";
-import { users } from "../../schema/users";
+import { users } from "../../models/users";
 import logActivity, { LogActivity } from "../../middleware/createLog";
 
 const route = express.Router();

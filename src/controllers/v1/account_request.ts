@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import { eq } from "drizzle-orm";
 
 import { db } from "../../config/connectDB";
-import { account_request } from "../../schema/account_request";
+import { account_request } from "../../models/account_request";
 
 import { authenticateToken } from "../../middleware/authenticateToken";
 import logActivity, { LogActivity } from "../../middleware/createLog";
