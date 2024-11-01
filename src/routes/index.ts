@@ -5,6 +5,7 @@ import * as user from "../controllers/v2/users";
 import * as auth from "../controllers/v2/auth";
 import * as log from "../controllers/v2/log_activity";
 import * as perm from "../controllers/v2/permissions";
+import * as role from "../controllers/v2/role";
 
 const route = Router();
 
@@ -28,6 +29,10 @@ route.delete("/account_request/:id", authenticateToken, acc.account_request_dele
 route.get("/permissions", authenticateToken, perm.permissions_get);
 route.get("/permissions/:id", authenticateToken, perm.permissions_get_by_id);
 route.post("/permissions", authenticateToken, perm.permissions_post);
+
+//path: /role
+// route.get("/role/:roleId/permissions", role.role_get);
+route.get("/role-perm", role.role_get);
 
 //path: /log_activity
 route.get("/log_activity", authenticateToken, log.log_activity_get);

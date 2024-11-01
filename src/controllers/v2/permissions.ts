@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { eq } from "drizzle-orm";
 
 import { db } from "../../config/connectDB";
-import { permission } from "../../models/permission";
+import { permission } from "../../models/permissions";
 
 import logActivity, { LogActivity } from "../../middleware/createLog";
 

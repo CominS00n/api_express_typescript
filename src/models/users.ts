@@ -1,5 +1,5 @@
 import { pgTable, serial, varchar, timestamp } from "drizzle-orm/pg-core";
-import { role } from "./permission";
+import { role } from "./permissions";
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
