@@ -1,24 +1,12 @@
 import { pgTable, serial, varchar, timestamp } from "drizzle-orm/pg-core";
-import { permission } from "./permission";
+import { role } from "./permission";
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: varchar("username", { length: 100 }).notNull(),
   password: varchar("password", { length: 100 }).notNull(),
   name: varchar("name", { length: 100 }).notNull(),
-  email: varchar("email", { length: 100 }).notNull(),
-  created_at: timestamp("created_at").defaultNow(),
-  updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const user_permission = pgTable("user_permission", {
-  id: serial("id").primaryKey(),
-  user_id: serial("user_id")
-    .notNull()
-    .references(() => users.id),
-  permission_id: serial("permission_id")
-    .notNull()
-    .references(() => permission.id),
+  email: varchar("email", { length: 100 }).notNull().unique(),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
 });

@@ -3,6 +3,7 @@ import {
   varchar,
   serial,
   integer,
+  text,
   timestamp,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
@@ -10,7 +11,7 @@ import { relations } from "drizzle-orm";
 export const permission = pgTable("permission", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
-  description: varchar("description", { length: 100 }),
+  description: text("description"),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
 });
@@ -18,7 +19,7 @@ export const permission = pgTable("permission", {
 export const role = pgTable("role", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
-  description: varchar("description", { length: 100 }),
+  description: text("description"),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
 });

@@ -11,10 +11,11 @@ const route = Router();
 //path: /login, /logout and /register
 route.post("/login", auth.login);
 route.post("/logout", authenticateToken, auth.logout);
-route.post("/register", auth.register);
+route.post("/register", authenticateToken, auth.register);
 
 // path: /users
 route.get("/users", authenticateToken, user.users_get);
+route.get("/users/:id", authenticateToken, user.users_get_id);
 route.post("/users", authenticateToken, user.users_post);
 route.delete("/users/:id", authenticateToken, user.users_delete);
 
