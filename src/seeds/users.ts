@@ -5,9 +5,9 @@ import bcrypt from "bcrypt";
 
 export const usersSeeds = async () => {
   const username: string = "admin";
-  const password: string = "123456";
+  const password: string = "admin";
   const name: string = "sitthihai puckpoo";
-  const email: string = "pop@gmail.com";
+  const email: string = "spuckpoo@gmail.com";
   const hashedPassword: string = await bcrypt.hash(password, 10);
 
   await db
@@ -17,6 +17,7 @@ export const usersSeeds = async () => {
       password: hashedPassword,
       name: name,
       email: email,
+      role_id: 1,
     })
     .execute();
 };

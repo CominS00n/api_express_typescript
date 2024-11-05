@@ -45,16 +45,8 @@ CREATE TABLE IF NOT EXISTS "log_activity" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "permission" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"name" varchar(100) NOT NULL,
-	"description" varchar(100),
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "role" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" varchar(100) NOT NULL,
-	"description" varchar(100),
+	"perm_name" varchar(100) NOT NULL,
+	"description" text,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
 );
@@ -66,10 +58,10 @@ CREATE TABLE IF NOT EXISTS "role_permission" (
 	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "user_permission" (
+CREATE TABLE IF NOT EXISTS "role" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"user_id" serial NOT NULL,
-	"permission_id" serial NOT NULL,
+	"role_name" varchar(100) NOT NULL,
+	"description" text,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
 );
@@ -80,8 +72,10 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"password" varchar(100) NOT NULL,
 	"name" varchar(100) NOT NULL,
 	"email" varchar(100) NOT NULL,
+	"role_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
+	"updated_at" timestamp DEFAULT now(),
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 DO $$ BEGIN
@@ -103,13 +97,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "user_permission" ADD CONSTRAINT "user_permission_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "user_permission" ADD CONSTRAINT "user_permission_permission_id_permission_id_fk" FOREIGN KEY ("permission_id") REFERENCES "public"."permission"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "users" ADD CONSTRAINT "users_role_id_role_id_fk" FOREIGN KEY ("role_id") REFERENCES "public"."role"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

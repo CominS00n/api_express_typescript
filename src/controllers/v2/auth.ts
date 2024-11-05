@@ -66,13 +66,14 @@ export const logout = async (req: Request, res: Response) => {
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { username, password, name, email } = req.body;
+    const { username, password, name, email, role_id } = req.body;
     const hashedPassword: string = await bcrypt.hash(password, 10);
     const data = {
       username,
       password: hashedPassword,
       name,
       email,
+      role_id,
     };
     let logData: LogActivity = {
       activityUser: name,

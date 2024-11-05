@@ -31,8 +31,9 @@ route.get("/permissions/:id", authenticateToken, perm.permissions_get_by_id);
 route.post("/permissions", authenticateToken, perm.permissions_post);
 
 //path: /role
+route.get("/roles", authenticateToken, role.role_get);
 // route.get("/role/:roleId/permissions", role.role_get);
-route.get("/role-perm", role.role_get);
+// route.get("/role-perm", role.role_get);
 
 //path: /log_activity
 route.get("/log_activity", authenticateToken, log.log_activity_get);
