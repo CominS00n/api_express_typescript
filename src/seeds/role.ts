@@ -5,6 +5,10 @@ import { role } from "../models/roles";
 export const roleSeeds = async () => {
   await db
     .insert(role)
-    .values({ name: "super-admin", description: "administrator" })
+    .values([
+      { name: "super-admin", description: "administrator" },
+      { name: "admin", description: "admin" },
+      { name: "user", description: "user" },
+    ])
     .execute();
 };

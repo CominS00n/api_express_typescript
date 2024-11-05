@@ -1,41 +1,43 @@
 import { Router } from "express";
 import { authenticateToken } from "../middleware/authenticateToken";
+import { checkPermissions } from "../middleware/checkPermission";
+
 import * as acc from "../controllers/v2/account_request";
 import * as user from "../controllers/v2/users";
 import * as auth from "../controllers/v2/auth";
 import * as log from "../controllers/v2/log_activity";
 import * as perm from "../controllers/v2/permissions";
 import * as role from "../controllers/v2/role";
+import * as rolePermission from "../controllers/v2/role_permission";  
 
 const route = Router();
 
 //path: /login, /logout and /register
 route.post("/login", auth.login);
 route.post("/logout", authenticateToken, auth.logout);
-route.post("/register", authenticateToken, auth.register);
+route.post("/register", [authenticateToken, checkPermissions(["userCreate"])], auth.register);
 
 // path: /users
-route.get("/users", authenticateToken, user.users_get);
-route.get("/users/:id", authenticateToken, user.users_get_id);
-route.post("/users", authenticateToken, user.users_post);
-route.delete("/users/:id", authenticateToken, user.users_delete);
+route.get("/users", [authenticateToken, checkPermissions(["userRead"])], user.users_get);
+route.get("/users/:id", [authenticateToken, checkPermissions(["userRead"])], user.users_get_id);
+route.post("/users", [authenticateToken, checkPermissions(["userCreate"])], user.users_post);
+route.delete("/users/:id", [authenticateToken, checkPermissions(["userUpdate"])], user.users_delete);
 
 // path: /account_request
-route.get("/account_request", authenticateToken, acc.account_request_get);
+route.get("/account_request", [authenticateToken, checkPermissions(["reqAccountCreate"])], acc.account_request_get);
 route.post("/account_request", acc.account_request_post);
-route.delete("/account_request/:id", authenticateToken, acc.account_request_delete);
+route.delete("/account_request/:id", [authenticateToken, checkPermissions(["reqAccountDelete"])], acc.account_request_delete);
 
 //path: /permissions
-route.get("/permissions", authenticateToken, perm.permissions_get);
-route.get("/permissions/:id", authenticateToken, perm.permissions_get_by_id);
-route.post("/permissions", authenticateToken, perm.permissions_post);
+route.get("/permissions", [authenticateToken, checkPermissions(["permRead"])], perm.permissions_get);
+route.get("/permissions/:id", [authenticateToken, checkPermissions(["permRead"])], perm.permissions_get_by_id);
+route.post("/permissions", [authenticateToken, checkPermissions(["permCreate"])], perm.permissions_post);
 
 //path: /role
-route.get("/roles", authenticateToken, role.role_get);
-// route.get("/role/:roleId/permissions", role.role_get);
-// route.get("/role-perm", role.role_get);
+route.get("/roles", [authenticateToken, checkPermissions(["roleRead"])], role.role_get);
+route.get("/role-perm", [authenticateToken, checkPermissions(["rolePermRead"])], rolePermission.role_perm_get);
 
 //path: /log_activity
-route.get("/log_activity", authenticateToken, log.log_activity_get);
+route.get("/log_activity", [authenticateToken, checkPermissions(["logRead"])], log.log_activity_get);
 
 export default route;

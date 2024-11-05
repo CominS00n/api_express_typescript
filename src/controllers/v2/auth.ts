@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 import { db } from "../../config/connectDB";
 import { users } from "../../models/users";
+import { role } from "../../models/roles";
 import logActivity, { LogActivity } from "../../middleware/createLog";
 
 const ageCookie = 1000 * 60 * 60 * 5; // 5 hours
@@ -14,8 +15,15 @@ export const login = async (req: Request, res: Response) => {
     const { username, password } = req.body;
 
     const user = await db
-      .select()
+      .select({
+        username: users.username,
+        password: users.password,
+        name: users.name,
+        role_id: users.role_id,
+        role: role.name,
+      })
       .from(users)
+      .leftJoin(role, eq(users.role_id, role.id))
       .where(eq(users.username, username))
       .limit(1)
       .execute();
@@ -23,10 +31,12 @@ export const login = async (req: Request, res: Response) => {
 
     const match = await bcrypt.compare(password, result.password);
     if (!match) {
-      res.status(400).json({ message: "Invalid user or password", status: 400 });
+      res
+        .status(400)
+        .json({ message: "Invalid user or password", status: 400 });
     } else {
       const token = jwt.sign(
-        { username: result.username, name: result.name },
+        { username: result.username, name: result.name, role: result.role },
         "supersecret",
         { expiresIn: "5h" }
       );

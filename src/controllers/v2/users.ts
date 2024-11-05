@@ -6,6 +6,10 @@ import { users } from "../../models/users";
 
 import logActivity, { LogActivity } from "../../middleware/createLog";
 
+import { role } from "../../models/roles";
+import { permission } from "../../models/permissions";
+import { rolePermission } from "../../models/role_permissions";
+
 export const users_get = async (req: Request, res: Response) => {
   try {
     const allUsers = await db
@@ -14,10 +18,39 @@ export const users_get = async (req: Request, res: Response) => {
         name: users.name,
         username: users.username,
         email: users.email,
+        role: role.name,
+        permission: permission.name,
       })
       .from(users)
+      .innerJoin(rolePermission, eq(users.role_id, rolePermission.role_id))
+      .leftJoin(role, eq(role.id, rolePermission.role_id))
+      .leftJoin(permission, eq(permission.id, rolePermission.permission_id))
       .execute();
-    res.status(200).json({ message: "Users found", data: allUsers, status: 200 });
+
+    const result = allUsers.reduce((acc: any[], row: any) => {
+      let user = acc.find((r: any) => r.id === row.id);
+
+      if (!user) {
+        user = {
+          id: row.id,
+          name: row.name,
+          username: row.username,
+          email: row.email,
+          role: row.role,
+          permission: [],
+        };
+        acc.push(user);
+      }
+
+      if (row.permission) {
+        user.permission.push(row.permission);
+      }
+      return acc;
+    }, []);
+
+    res
+      .status(200)
+      .json({ message: "Users found", data: result, status: 200 });
   } catch (error) {
     res.status(404).json({ message: "User not found", status: 404 });
   }
@@ -53,7 +86,7 @@ export const users_post = async (req: Request, res: Response) => {
     await logActivity(logData);
     res.status(201).json({ message: "User created successfully", status: 201 });
   } catch (error) {
-    res.status(500).json({ message: "User creation failed",  status: 500 });
+    res.status(500).json({ message: "User creation failed", status: 500 });
   }
 };
 
