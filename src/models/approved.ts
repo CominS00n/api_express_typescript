@@ -8,12 +8,14 @@ export const approved = pgTable("approved", {
   account_request_id: serial("account_request_id")
     .notNull()
     .references(() => account_request.id),
-  head_of_requestor: status("head_of_requestor").default("Pending"),
-  head_of_requestor_remarks: varchar("head_of_requestor_remarks", {
+  requestor_name: varchar("requestor_name", { length: 100 }),
+  requestor_status: status("requestor_status").default("Pending"),
+  requestor_remarks: varchar("requestor_remarks", {
     length: 100,
   }),
-  head_of_requestor_date: date("head_of_requestor_date"),
-  implementor: status("implementor").default("Pending"),
+  requestor_date: date("requestor_date"),
+  implementor_name: varchar("implementor_name", { length: 100 }),
+  implementor_status: status("implementor").default("Pending"),
   implementor_remarks: varchar("implementor_remarks", { length: 100 }),
   implementor_date: date("implementor_date"),
   created_at: timestamp("created_at").defaultNow(),
