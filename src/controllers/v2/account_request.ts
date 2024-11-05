@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { eq } from "drizzle-orm";
 
-import { db } from "../../config/connectDB";
+import { db } from "../../config/connect";
 import { account_request } from "../../models/account_request";
 
 import logActivity, { LogActivity } from "../../middleware/createLog";

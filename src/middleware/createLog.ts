@@ -1,4 +1,4 @@
-import { db } from "../config/connectDB";
+import { db } from "../config/connect";
 import { log_activity } from "../models/log_activity";
 
 export type LogActivity = {

@@ -1,4 +1,4 @@
-import { db } from "../config/connectDB";
+import { db } from "../config/connect";
 import { users } from "../models/users";
 
 import bcrypt from "bcrypt";

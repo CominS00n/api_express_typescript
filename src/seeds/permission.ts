@@ -1,4 +1,4 @@
-import { db } from "../config/connectDB";
+import { db } from "../config/connect";
 import { permission } from "../models/permissions";
 
 export const permissionSeeds = async () => {

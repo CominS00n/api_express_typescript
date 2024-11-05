@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { db } from "../../config/connectDB";
+import { db } from "../../config/connect";
 import { users } from "../../models/users";
 import { role } from "../../models/roles";
 import logActivity, { LogActivity } from "../../middleware/createLog";

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { db } from "../../config/connectDB";
+import { db } from "../../config/connect";
 import { log_activity } from "../../models/log_activity";
 
 export const log_activity_get = async (req: Request, res: Response) => {

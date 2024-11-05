@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { eq } from "drizzle-orm";
-import { db } from "../config/connectDB";
+import { db } from "../config/connect";
 import { role } from "../models/roles";
 import { permission } from "../models/permissions";
 import { rolePermission } from "../models/role_permissions";
