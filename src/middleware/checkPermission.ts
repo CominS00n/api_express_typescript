@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { eq } from "drizzle-orm";
 import { db } from "../config/connect";
-import { role } from "../models/roles";
-import { permission } from "../models/permissions";
-import { rolePermission } from "../models/role_permissions";
+import { role } from "../models/role_permissions/roles";
+import { permission } from "../models/role_permissions/permissions";
+import { rolePermission } from "../models/role_permissions/role_permissions";
 
 export const checkPermissions =
   (permissions: string[]) =>

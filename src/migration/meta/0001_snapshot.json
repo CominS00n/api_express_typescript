@@ -1,6 +1,6 @@
 {
-  "id": "5360f5eb-feee-4ad4-86e7-68adc850ccee",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "a116af7f-e184-4792-942c-25f0172f4c0c",
+  "prevId": "5360f5eb-feee-4ad4-86e7-68adc850ccee",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -711,7 +711,71 @@
   },
   "schemas": {},
   "sequences": {},
-  "views": {},
+  "views": {
+    "public.user_views": {
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_id": {
+          "name": "role_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "role_name": {
+          "name": "role_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "perm_id": {
+          "name": "perm_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "perm_name": {
+          "name": "perm_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "group_id": {
+          "name": "group_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "group_name": {
+          "name": "group_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "definition": "select \"users\".\"user_id\", \"users\".\"name\", \"users\".\"email\", \"role\".\"role_id\", \"role\".\"role_name\", \"permission\".\"perm_id\", \"permission\".\"perm_name\", \"group\".\"group_id\", \"group\".\"group_name\" from \"users\" left join \"user_role\" on \"users\".\"user_id\" = \"user_role\".\"user_id\" left join \"role\" on \"user_role\".\"role_id\" = \"role\".\"role_id\" left join \"role_permission\" on \"role\".\"role_id\" = \"role_permission\".\"role_id\" left join \"permission\" on \"role_permission\".\"permission_id\" = \"permission\".\"perm_id\" left join \"user_group\" on \"users\".\"user_id\" = \"user_group\".\"user_id\" left join \"group\" on \"user_group\".\"group_id\" = \"group\".\"group_id\"",
+      "name": "user_views",
+      "schema": "public",
+      "isExisting": false,
+      "materialized": false
+    }
+  },
   "_meta": {
     "columns": {},
     "schemas": {},

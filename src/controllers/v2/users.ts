@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 import { eq } from "drizzle-orm";
 
 import { db } from "../../config/connect";
-import { users } from "../../models/users";
+import { users } from "../../models/users/users";
 
 import logActivity, { LogActivity } from "../../middleware/createLog";
 
-import { role } from "../../models/roles";
-import { permission } from "../../models/permissions";
-import { rolePermission } from "../../models/role_permissions";
+import { role } from "../../models/role_permissions/roles";
+import { permission } from "../../models/role_permissions/permissions";
+import { rolePermission } from "../../models/role_permissions/role_permissions";
 
 export const users_get = async (req: Request, res: Response) => {
   try {

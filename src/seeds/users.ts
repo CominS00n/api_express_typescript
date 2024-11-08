@@ -1,5 +1,5 @@
 import { db } from "../config/connect";
-import { users } from "../models/users";
+import { users } from "../models/users/users";
 
 import bcrypt from "bcrypt";
 
@@ -17,7 +17,7 @@ export const usersSeeds = async () => {
       password: hashedPassword,
       name: name,
       email: email,
-      role_id: 1,
+      phone: "0812345678",
     })
     .execute();
 };

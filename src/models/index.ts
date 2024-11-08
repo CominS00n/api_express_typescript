@@ -8,4 +8,3 @@ export const req_type = pgEnum("req_type", [
 ]);
 export const account_type = pgEnum("account_type", ["Permanent", "Temporary"]);
 export const status = pgEnum("status", ["Pending", "Approved", "Rejected"]);
-

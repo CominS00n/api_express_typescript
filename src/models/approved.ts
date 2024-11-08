@@ -1,10 +1,10 @@
 import { pgTable, serial, varchar, date, timestamp } from "drizzle-orm/pg-core";
 import { account_request } from "./account_request";
 
-import { status } from "./create_types";
+import { status } from ".";
 
 export const approved = pgTable("approved", {
-  id: serial("id").primaryKey(),
+  id: serial("approve_id").primaryKey(),
   account_request_id: serial("account_request_id")
     .notNull()
     .references(() => account_request.id),

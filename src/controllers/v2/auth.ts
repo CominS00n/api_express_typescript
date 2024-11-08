@@ -4,8 +4,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { db } from "../../config/connect";
-import { users } from "../../models/users";
-import { role } from "../../models/roles";
+import { users } from "../../models/users/users";
+import { role } from "../../models/role_permissions/roles";
 import logActivity, { LogActivity } from "../../middleware/createLog";
 
 const ageCookie = 1000 * 60 * 60 * 5; // 5 hours

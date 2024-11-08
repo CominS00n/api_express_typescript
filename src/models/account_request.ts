@@ -7,11 +7,11 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
-import { account_type, req_type, status } from "./create_types";
+import { account_type, req_type, status } from ".";
 
 // Define the table schema
 export const account_request = pgTable("account_request", {
-  id: serial("id").primaryKey(),
+  id: serial("acc_req_id").primaryKey(),
   full_name: varchar("full_name", { length: 100 }).notNull(),
   position: varchar("position", { length: 100 }).notNull(),
   company: varchar("company", { length: 100 }).notNull(),

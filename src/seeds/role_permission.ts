@@ -1,5 +1,5 @@
 import { db } from "../config/connect";
-import { rolePermission } from "../models/role_permissions";
+import { rolePermission } from "../models/role_permissions/role_permissions";
 
 export const rolePermissionSeeds = async () => {
   await db

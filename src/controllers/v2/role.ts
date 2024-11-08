@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { db } from "../../config/connect";
-import { role } from "../../models/roles";
+import { role } from "../../models/role_permissions/roles";
 
 export const role_get = async (req: Request, res: Response) => {
   try {
