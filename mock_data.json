@@ -1,0 +1,41 @@
+[
+  {
+    "user_id": 1,
+    "user_name": "sitthihai puckpoo",
+    "user_email": "spuckpoo@gmail.com",
+    "user_username": "admin",
+    "user_password": "$2b$10$54g.qYL5Xh5aH5sbjEwMtu3WW8iWbw8wTcSto3nMd1m/fzLownAFG",
+    "roles": [
+      {
+        "role_id": 1,
+        "role_name": "super-admin",
+        "permissions": [
+          {
+            "permission_id": 1,
+            "permission_name": "allowAll"
+          }
+        ]
+      },
+      {
+        "role_id": 2,
+        "role_name": "admin",
+        "permissions": [
+          "userCreate",
+          "userRead",
+          "userUpdate",
+          "userDelete",
+          "roleCreate",
+          "roleRead",
+          "permRead",
+          "rolePermCreate",
+          "rolePermRead",
+          "reqAccountCreate",
+          "reqAccountRead",
+          "reqAccountUpdate",
+          "reqAccountDelete"
+        ]
+      }
+    ],
+    "groups": ["admin"]
+  }
+]

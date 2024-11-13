@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 import { db } from "../../config/connect";
 import { users } from "../../models/users/users";
-import { role } from "../../models/role_permissions/roles";
+import { userViews } from "../../models/view_table/user_views";
 import logActivity, { LogActivity } from "../../middleware/createLog";
 
 const ageCookie = 1000 * 60 * 60 * 5; // 5 hours
@@ -13,35 +13,31 @@ const ageCookie = 1000 * 60 * 60 * 5; // 5 hours
 export const login = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
-
-    const user = await db
-      .select({
-        username: users.username,
-        password: users.password,
-        name: users.name,
-        role_id: users.role_id,
-        role: role.name,
-      })
-      .from(users)
-      .leftJoin(role, eq(users.role_id, role.id))
-      .where(eq(users.username, username))
+    const users = await db
+      .select()
+      .from(userViews)
+      .where(eq(userViews.user_username, username))
       .limit(1)
       .execute();
-    const result = user[0];
+    const result = users[0];
 
-    const match = await bcrypt.compare(password, result.password);
+    const match = await bcrypt.compare(password, result.user_password);
     if (!match) {
       res
         .status(400)
         .json({ message: "Invalid user or password", status: 400 });
     } else {
       const token = jwt.sign(
-        { username: result.username, name: result.name, role: result.role },
+        {
+          username: result.user_name,
+          name: result.user_name,
+          role: result.role_name,
+        },
         "supersecret",
         { expiresIn: "5h" }
       );
       let logData: LogActivity = {
-        activityUser: result.name,
+        activityUser: result.user_name,
         activityDetails: "User logged in",
         activityDate: new Date().toISOString(),
       };
@@ -76,14 +72,14 @@ export const logout = async (req: Request, res: Response) => {
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { username, password, name, email, role_id } = req.body;
+    const { username, password, name, email, phone } = req.body;
     const hashedPassword: string = await bcrypt.hash(password, 10);
     const data = {
       username,
       password: hashedPassword,
       name,
       email,
-      role_id,
+      phone,
     };
     let logData: LogActivity = {
       activityUser: name,

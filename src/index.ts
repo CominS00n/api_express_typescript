@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 
-
 // import route from "./route";
 import route from "./routes/index";
 
@@ -16,7 +15,10 @@ const port: number = 8000;
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "https://rtc-template-frontend.vercel.app",
+    ],
     credentials: true,
   })
 );
