@@ -9,6 +9,7 @@ import * as log from "../controllers/v2/log_activity";
 import * as perm from "../controllers/v2/permissions";
 import * as role from "../controllers/v2/role";
 import * as rolePermission from "../controllers/v2/role_permission";
+import * as approved from "../controllers/v2/approved";
 
 const route = Router();
 
@@ -47,7 +48,7 @@ route.delete(
 // path: /account_request
 route.get(
   "/account_request",
-  [authenticateToken, checkPermissions(["reqAccountCreate"])],
+  // [authenticateToken, checkPermissions(["reqAccountCreate"])],
   acc.account_request_get
 );
 route.post("/account_request", acc.account_request_post);
@@ -56,6 +57,7 @@ route.delete(
   [authenticateToken, checkPermissions(["reqAccountDelete"])],
   acc.account_request_delete
 );
+route.put("/account_request", approved.approved_put);
 
 //path: /permissions
 route.get(

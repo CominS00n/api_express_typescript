@@ -1,9 +1,58 @@
 {
-  "id": "5360f5eb-feee-4ad4-86e7-68adc850ccee",
+  "id": "28e0ba91-275f-402e-8216-d904cfc1453e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.log_activity": {
+      "name": "log_activity",
+      "schema": "",
+      "columns": {
+        "log_id": {
+          "name": "log_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "activity_user": {
+          "name": "activity_user",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "activity_details": {
+          "name": "activity_details",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "activity_date": {
+          "name": "activity_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "public.account_request": {
       "name": "account_request",
       "schema": "",
@@ -133,60 +182,46 @@
           "primaryKey": true,
           "notNull": true
         },
-        "account_request_id": {
-          "name": "account_request_id",
-          "type": "serial",
+        "acc_req_id": {
+          "name": "acc_req_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "requestor_name": {
-          "name": "requestor_name",
+        "approved_type": {
+          "name": "approved_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "approved_name": {
+          "name": "approved_name",
           "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "approved_email": {
+          "name": "approved_email",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "approved_remark": {
+          "name": "approved_remark",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "requestor_status": {
-          "name": "requestor_status",
+        "approved_status": {
+          "name": "approved_status",
           "type": "status",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'Pending'"
         },
-        "requestor_remarks": {
-          "name": "requestor_remarks",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "requestor_date": {
-          "name": "requestor_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "implementor_name": {
-          "name": "implementor_name",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "implementor": {
-          "name": "implementor",
-          "type": "status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'Pending'"
-        },
-        "implementor_remarks": {
-          "name": "implementor_remarks",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "implementor_date": {
-          "name": "implementor_date",
+        "approved_date": {
+          "name": "approved_date",
           "type": "date",
           "primaryKey": false,
           "notNull": false
@@ -208,12 +243,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "approved_account_request_id_account_request_acc_req_id_fk": {
-          "name": "approved_account_request_id_account_request_acc_req_id_fk",
+        "approved_acc_req_id_account_request_acc_req_id_fk": {
+          "name": "approved_acc_req_id_account_request_acc_req_id_fk",
           "tableFrom": "approved",
           "tableTo": "account_request",
           "columnsFrom": [
-            "account_request_id"
+            "acc_req_id"
           ],
           "columnsTo": [
             "acc_req_id"
@@ -222,55 +257,6 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "public.log_activity": {
-      "name": "log_activity",
-      "schema": "",
-      "columns": {
-        "log_id": {
-          "name": "log_id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "activity_user": {
-          "name": "activity_user",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "activity_details": {
-          "name": "activity_details",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "activity_date": {
-          "name": "activity_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -711,7 +697,83 @@
   },
   "schemas": {},
   "sequences": {},
-  "views": {},
+  "views": {
+    "public.user_views": {
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_id": {
+          "name": "role_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "role_name": {
+          "name": "role_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "perm_id": {
+          "name": "perm_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "perm_name": {
+          "name": "perm_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "group_id": {
+          "name": "group_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "group_name": {
+          "name": "group_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "definition": "select \"users\".\"user_id\", \"users\".\"name\", \"users\".\"email\", \"users\".\"username\", \"users\".\"password\", \"role\".\"role_id\", \"role\".\"role_name\", \"permission\".\"perm_id\", \"permission\".\"perm_name\", \"group\".\"group_id\", \"group\".\"group_name\" from \"users\" left join \"user_role\" on \"users\".\"user_id\" = \"user_role\".\"user_id\" left join \"role\" on \"user_role\".\"role_id\" = \"role\".\"role_id\" left join \"role_permission\" on \"role\".\"role_id\" = \"role_permission\".\"role_id\" left join \"permission\" on \"role_permission\".\"permission_id\" = \"permission\".\"perm_id\" left join \"user_group\" on \"users\".\"user_id\" = \"user_group\".\"user_id\" left join \"group\" on \"user_group\".\"group_id\" = \"group\".\"group_id\"",
+      "name": "user_views",
+      "schema": "public",
+      "isExisting": false,
+      "materialized": false
+    }
+  },
   "_meta": {
     "columns": {},
     "schemas": {},

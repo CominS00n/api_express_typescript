@@ -2,13 +2,18 @@ import { Request, Response } from "express";
 import { eq } from "drizzle-orm";
 
 import { db } from "../../config/connect";
-import { account_request } from "../../models/account_request";
+import { account_request } from "../../models/req_acc/account_request";
+import { approved } from "../../models/req_acc/approved";
 
 import logActivity, { LogActivity } from "../../middleware/createLog";
 
 export const account_request_get = async (req: Request, res: Response) => {
   try {
-    const account_requests = await db.select().from(account_request).execute();
+    const account_requests = await db
+      .select()
+      .from(account_request)
+      .leftJoin(approved, eq(account_request.id, approved.acc_req_id))
+      .execute();
     res.status(200).json({
       message: "Account requests found",
       data: account_requests,
@@ -25,16 +30,30 @@ export const account_request_get = async (req: Request, res: Response) => {
 export const account_request_post = async (req: Request, res: Response) => {
   try {
     const req_data = req.body;
+    const result_req_acc = req_data.account_request;
+    const approved_acc = req_data.approved_result;
+    const data = await db
+      .insert(account_request)
+      .values(result_req_acc)
+      .returning()
+      .execute();
 
-    await db.insert(account_request).values(req_data).execute();
+    const id = data[0].id;
+    for (const x in approved_acc) {
+      await db
+        .insert(approved)
+        .values({ ...approved_acc[x], acc_req_id: id })
+        .execute();
+    }
 
-    let logData: LogActivity = {
-      activityUser: req_data.full_name,
-      activityDetails: "Account request created",
-      activityDate: new Date().toISOString(),
-    };
+    // let logData: LogActivity = {
+    //   activityUser: req_data.full_name,
+    //   activityDetails: "Account request created",
+    //   activityDate: new Date().toISOString(),
+    // };
 
-    await logActivity(logData);
+    // await logActivity(logData);
+
     res.status(201).json({ message: "Account request created", status: 201 });
   } catch (error) {
     console.error("Error creating account_request:", error);
