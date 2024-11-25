@@ -20,6 +20,7 @@ export const approved = pgTable("approved", {
   type: varchar("approved_type", { length: 50 }).notNull(),
   name: varchar("approved_name", { length: 100 }).notNull(),
   email: varchar("approved_email", { length: 150 }).notNull(),
+  signature: text("approved_signature"),
   remark: text("approved_remark"),
   status: status("approved_status").default("Pending").notNull(),
   date: date("approved_date"),

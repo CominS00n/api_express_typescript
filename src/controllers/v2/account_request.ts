@@ -14,9 +14,26 @@ export const account_request_get = async (req: Request, res: Response) => {
       .from(account_request)
       .leftJoin(approved, eq(account_request.id, approved.acc_req_id))
       .execute();
+    
+    const result = account_requests.reduce((acc: any[], item: any) => {
+      const { account_request, approved } = item;
+
+      const existingRequest = acc.find((req) => req.id === account_request.id);
+
+      if (existingRequest) {
+        existingRequest.approved.push(approved);
+      } else {
+        acc.push({
+          ...account_request,
+          approved: approved ? [approved] : [],
+        });
+      }
+
+      return acc;
+    }, []);
     res.status(200).json({
       message: "Account requests found",
-      data: account_requests,
+      data: result,
       status: 200,
     });
   } catch (error) {

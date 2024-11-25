@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { and, eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 
 import { db } from "../../config/connect";
 import { approved } from "../../models/req_acc/approved";
@@ -32,10 +32,10 @@ export const approved_put = async (req: Request, res: Response) => {
       .where(
         and(
           eq(approved.acc_req_id, result.acc_req_id),
-          eq(approved.name, result.name),
-          eq(approved.email, result.email)
+          eq(approved.status, "Pending")
         )
       )
+      .limit(1)
       .execute();
 
     res.status(200).json({ message: "Approved updated", data, status: 200 });

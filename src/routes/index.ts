@@ -43,7 +43,6 @@ route.delete(
   [authenticateToken, checkPermissions(["userUpdate"])],
   user.users_delete
 );
-// route.get("/user-views", user.get_user_views);
 
 // path: /account_request
 route.get(
