@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../../config/connect";
 import { account_request } from "../../models/req_acc/account_request";
 import { approved } from "../../models/req_acc/approved";
+import { sendMail } from "../../middleware/sendEmail";
 
 import logActivity, { LogActivity } from "../../middleware/createLog";
 
@@ -14,7 +15,7 @@ export const account_request_get = async (req: Request, res: Response) => {
       .from(account_request)
       .leftJoin(approved, eq(account_request.id, approved.acc_req_id))
       .execute();
-    
+
     const result = account_requests.reduce((acc: any[], item: any) => {
       const { account_request, approved } = item;
 
@@ -44,6 +45,42 @@ export const account_request_get = async (req: Request, res: Response) => {
   }
 };
 
+export const account_request_post_id = async (req: Request, res: Response) => {
+  try {
+    const id: number = parseInt(req.params.id);
+    const account_requests = await db
+      .select()
+      .from(account_request)
+      .leftJoin(approved, eq(account_request.id, approved.acc_req_id))
+      .where(eq(account_request.id, id))
+      .execute();
+    const result = account_requests.reduce((acc: any[], item: any) => {
+      const { account_request, approved } = item;
+
+      const existingRequest = acc.find((req) => req.id === account_request.id);
+
+      if (existingRequest) {
+        existingRequest.approved.push(approved);
+      } else {
+        acc.push({
+          ...account_request,
+          approved: approved ? [approved] : [],
+        });
+      }
+
+      return acc;
+    }, []);
+    res.status(200).json({
+      message: "Account requests found",
+      data: result,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error updating approved:", error);
+    res.status(500).json({ message: "Error updating approved", status: 500 });
+  }
+};
+
 export const account_request_post = async (req: Request, res: Response) => {
   try {
     const req_data = req.body;
@@ -61,6 +98,26 @@ export const account_request_post = async (req: Request, res: Response) => {
         .insert(approved)
         .values({ ...approved_acc[x], acc_req_id: id })
         .execute();
+    }
+
+    const emailData = await db
+      .select()
+      .from(approved)
+      .where(eq(approved.acc_req_id, id))
+      .limit(1)
+      .execute();
+
+    //! Send email
+    try {
+      const from: string = "spuckpoo@gmail.com";
+      const to: string = `${emailData[0].email}`;
+      const subject: string = "New Account Request";
+      const mailTemplate: string =
+        '<h1>New Account Request</h1> <a href="https://www.google.com">Google</a>';
+      const cc: string = "spuckpooforwork@gmail.com";
+      sendMail(from, to, subject, mailTemplate, cc);
+    } catch (error) {
+      console.error(error);
     }
 
     // let logData: LogActivity = {

@@ -1,5 +1,5 @@
 {
-  "id": "28e0ba91-275f-402e-8216-d904cfc1453e",
+  "id": "d81c1b1d-f9f8-4e08-b8f3-052b2d21eb78",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -205,6 +205,12 @@
           "type": "varchar(150)",
           "primaryKey": false,
           "notNull": true
+        },
+        "approved_signature": {
+          "name": "approved_signature",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "approved_remark": {
           "name": "approved_remark",

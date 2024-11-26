@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS "approved" (
 	"approved_type" varchar(50) NOT NULL,
 	"approved_name" varchar(100) NOT NULL,
 	"approved_email" varchar(150) NOT NULL,
+	"approved_signature" text,
 	"approved_remark" text,
 	"approved_status" "status" DEFAULT 'Pending' NOT NULL,
 	"approved_date" date,
