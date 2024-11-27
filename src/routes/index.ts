@@ -50,7 +50,7 @@ route.get(
   // [authenticateToken, checkPermissions(["reqAccountCreate"])],
   acc.account_request_get
 );
-route.get("/account_request/:id", acc.account_request_post_id);
+route.get("/account_request/:id", acc.account_request_get_id);
 route.post("/account_request", acc.account_request_post);
 route.delete(
   "/account_request/:id",

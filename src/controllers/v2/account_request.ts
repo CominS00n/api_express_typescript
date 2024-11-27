@@ -45,7 +45,7 @@ export const account_request_get = async (req: Request, res: Response) => {
   }
 };
 
-export const account_request_post_id = async (req: Request, res: Response) => {
+export const account_request_get_id = async (req: Request, res: Response) => {
   try {
     const id: number = parseInt(req.params.id);
     const account_requests = await db
@@ -112,8 +112,25 @@ export const account_request_post = async (req: Request, res: Response) => {
       const from: string = "spuckpoo@gmail.com";
       const to: string = `${emailData[0].email}`;
       const subject: string = "New Account Request";
-      const mailTemplate: string =
-        '<h1>New Account Request</h1> <a href="https://www.google.com">Google</a>';
+      // const mailTemplate: string =
+      //   `<h1>New Account Request</h1> <a href="http://localhost:3000/test-data/${id}">Google</a>`;
+      const mailTemplate: string = `
+      <div class="container">
+        <h2>ยืนยันการสร้างบัญชีของคุณ</h2>
+        <p>เรียนคุณ ${emailData[0].name},</p>
+        <p>ขอบคุณที่สนใจสมัครใช้งานระบบของเรา! เราได้รับคำขอให้สร้างบัญชีสำหรับอีเมลนี้ หากคุณเป็นผู้ดำเนินการ กรุณายืนยันคำขอโดยคลิกที่ปุ่มด้านล่าง:</p>
+        <a href="http://localhost:3000/test-data/${id}">Approved or Reject Account</a>
+        <p>หากปุ่มไม่ทำงาน คุณสามารถคัดลอกและวางลิงก์ด้านล่างในเบราว์เซอร์ของคุณ:</p>
+        <p><a href="[URL สำหรับยืนยัน]">[URL สำหรับยืนยัน]</a></p>
+        <p>กรุณาดำเนินการยืนยันภายใน 24 ชั่วโมง มิฉะนั้นคำขอจะถูกยกเลิกโดยอัตโนมัติ</p>
+        <p>หากคุณไม่ได้เป็นผู้ส่งคำขอนี้ กรุณาเพิกเฉยต่ออีเมลนี้ ไม่มีการดำเนินการใดๆ จะเกิดขึ้นกับบัญชีของคุณ</p>
+        <div class="footer">
+            <p>ขอแสดงความนับถือ,</p>
+            <p>[ชื่อทีม/องค์กร]</p>
+            <p>[อีเมลติดต่อ] | [เบอร์โทรติดต่อ (ถ้ามี)]</p>
+        </div>
+    </div>
+    `;
       const cc: string = "spuckpooforwork@gmail.com";
       sendMail(from, to, subject, mailTemplate, cc);
     } catch (error) {
