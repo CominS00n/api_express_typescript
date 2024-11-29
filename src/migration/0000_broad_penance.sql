@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS "account_request" (
 	"telephone" varchar(100) NOT NULL,
 	"email" varchar(100) NOT NULL,
 	"req_type" "req_type" NOT NULL,
-	"system" varchar(100) NOT NULL,
+	"system" varchar[] NOT NULL,
 	"req_date" date NOT NULL,
 	"account_type" "account_type" NOT NULL,
 	"expiry_date" date,

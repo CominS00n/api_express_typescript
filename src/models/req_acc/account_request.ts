@@ -19,7 +19,7 @@ export const account_request = pgTable("account_request", {
   telephone: varchar("telephone", { length: 100 }).notNull(),
   email: varchar("email", { length: 100 }).notNull(),
   req_type: req_type("req_type").notNull(),
-  system: varchar("system", { length: 100 }).notNull(),
+  system: varchar("system").array().notNull(),
   req_date: date("req_date").notNull(),
   account_type: account_type("account_type").notNull(),
   expiry_date: date("expiry_date"),

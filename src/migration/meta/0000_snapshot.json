@@ -1,5 +1,5 @@
 {
-  "id": "d81c1b1d-f9f8-4e08-b8f3-052b2d21eb78",
+  "id": "aa4b097a-3c6c-419c-ab7d-574002bf79ae",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -108,7 +108,7 @@
         },
         "system": {
           "name": "system",
-          "type": "varchar(100)",
+          "type": "varchar[]",
           "primaryKey": false,
           "notNull": true
         },
