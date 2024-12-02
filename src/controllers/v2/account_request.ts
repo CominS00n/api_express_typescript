@@ -6,6 +6,8 @@ import { account_request } from "../../models/req_acc/account_request";
 import { approved } from "../../models/req_acc/approved";
 import { sendMail } from "../../middleware/sendEmail";
 
+import type { em } from "../../types";
+
 import logActivity, { LogActivity } from "../../middleware/createLog";
 
 export const account_request_get = async (req: Request, res: Response) => {
@@ -114,19 +116,10 @@ export const account_request_post = async (req: Request, res: Response) => {
       const subject: string = "New Account Request";
       // const mailTemplate: string =
       //   `<h1>New Account Request</h1> <a href="http://localhost:3000/test-data/${id}">Google</a>`;
-      const mailTemplate: string = `
-      <div class="container">
-        <h2>ยืนยันการสร้างบัญชีของคุณ</h2>
-        <p>เรียนคุณ ${emailData[0].name},</p>
-        <a href="https://rtc-template-frontend.vercel.app/approval/${id}">Approved or Reject Account</a>
-        <p>กรุณาดำเนินการยืนยันภายใน 24 ชั่วโมง มิฉะนั้นคำขอจะถูกยกเลิกโดยอัตโนมัติ</p>
-        <div class="footer">
-            <p>ขอแสดงความนับถือ,</p>
-            <p>[ชื่อทีม/องค์กร]</p>
-            <p>[อีเมลติดต่อ] | [เบอร์โทรติดต่อ (ถ้ามี)]</p>
-        </div>
-    </div>
-    `;
+      const mailTemplate: em = {
+        em_id: id,
+        em_name: emailData[0].name,
+      };
       const cc: string = "spuckpooforwork@gmail.com";
       sendMail(from, to, subject, mailTemplate, cc);
     } catch (error) {

@@ -5,6 +5,7 @@ import { db } from "../../config/connect";
 import { approved } from "../../models/req_acc/approved";
 import { account_request } from "../../models/req_acc/account_request";
 import { sendMail } from "../../middleware/sendEmail";
+import type { em } from "../../types";
 
 export const approved_put = async (req: Request, res: Response) => {
   try {
@@ -45,8 +46,10 @@ export const approved_put = async (req: Request, res: Response) => {
         const from: string = "spuckpoo@gmail.com";
         const to: string = `${data[0].email}`;
         const subject: string = "New Account Request";
-        const mailTemplate: string =
-          '<h1>New Account Request</h1> <a href="https://www.google.com">Google</a>';
+        const mailTemplate: em = {
+          em_id: result.acc_req_id,
+          em_name: data[0].name,
+        };
         const cc: string = "";
         sendMail(from, to, subject, mailTemplate, cc);
       } catch (error) {
