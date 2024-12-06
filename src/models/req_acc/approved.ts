@@ -1,11 +1,11 @@
 import {
   pgTable,
-  serial,
   varchar,
   date,
   text,
   timestamp,
   integer,
+  uuid,
 } from "drizzle-orm/pg-core";
 import { account_request } from "./account_request";
 import { relations } from "drizzle-orm";
@@ -13,8 +13,8 @@ import { relations } from "drizzle-orm";
 import { status } from "..";
 
 export const approved = pgTable("approved", {
-  id: serial("approve_id").primaryKey(),
-  acc_req_id: integer("acc_req_id")
+  id: uuid("approve_id").primaryKey().defaultRandom(),
+  acc_req_id: uuid("acc_req_id")
     .notNull()
     .references(() => account_request.id),
   type: varchar("approved_type", { length: 50 }).notNull(),
@@ -26,6 +26,7 @@ export const approved = pgTable("approved", {
   date: date("approved_date"),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
+  deleted_at: timestamp("deleted_at"),
 });
 
 // relations 1 to many

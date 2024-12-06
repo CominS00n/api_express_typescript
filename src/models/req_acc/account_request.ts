@@ -1,9 +1,9 @@
 import {
   pgTable,
-  serial,
   text,
   varchar,
   date,
+  uuid,
   timestamp,
 } from "drizzle-orm/pg-core";
 
@@ -11,7 +11,7 @@ import { account_type, req_type, status } from "..";
 
 // Define the table schema
 export const account_request = pgTable("account_request", {
-  id: serial("acc_req_id").primaryKey(),
+  id: uuid("acc_req_id").primaryKey().defaultRandom(),
   full_name: varchar("full_name", { length: 100 }).notNull(),
   position: varchar("position", { length: 100 }).notNull(),
   company: varchar("company", { length: 100 }).notNull(),
@@ -28,4 +28,5 @@ export const account_request = pgTable("account_request", {
   status: status("status").default("Pending").notNull(),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
+  deleted_at: timestamp("deleted_at"),
 });

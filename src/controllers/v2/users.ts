@@ -53,7 +53,7 @@ import { userViews } from "../../models/view_table/user_views";
 
 export const users_get_id = async (req: Request, res: Response) => {
   try {
-    const id: number = parseInt(req.params.id);
+    const id: string = req.params.id;
     const user = await db
       .select()
       .from(userViews)
@@ -82,7 +82,7 @@ export const users_post = async (req: Request, res: Response) => {
 
 export const users_delete = async (req: Request, res: Response) => {
   try {
-    const id: number = parseInt(req.params.id);
+    const id: string = req.params.id;
     await db.delete(users).where(eq(users.id, id)).execute();
     let logData: LogActivity = {
       activityUser: req.cookies.user.name,

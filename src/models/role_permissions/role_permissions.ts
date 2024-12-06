@@ -1,13 +1,13 @@
 import { relations } from "drizzle-orm";
-import { pgTable, integer, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 import { role } from "./roles";
 import { permission } from "./permissions";
 
 export const rolePermission = pgTable("role_permission", {
-  role_id: integer("role_id")
+  role_id: uuid("role_id")
     .notNull()
     .references(() => role.id),
-  permission_id: integer("permission_id")
+  permission_id: uuid("permission_id")
     .notNull()
     .references(() => permission.id),
   created_at: timestamp("created_at").defaultNow(),

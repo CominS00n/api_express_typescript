@@ -1,13 +1,13 @@
-import { pgTable, integer, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { group } from "./group";
 import { users } from "./users";
 
 export const userGroup = pgTable("user_group", {
-  user_id: integer("user_id")
+  user_id: uuid("user_id")
     .notNull()
     .references(() => users.id),
-  group_id: integer("group_id")
+  group_id: uuid("group_id")
     .notNull()
     .references(() => group.id),
   created_at: timestamp("created_at").defaultNow(),

@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { eq } from "drizzle-orm";
+import e, { Request, Response } from "express";
+import { eq, isNull } from "drizzle-orm";
 
 import { db } from "../../config/connect";
 import { account_request } from "../../models/req_acc/account_request";
@@ -16,6 +16,7 @@ export const account_request_get = async (req: Request, res: Response) => {
       .select()
       .from(account_request)
       .leftJoin(approved, eq(account_request.id, approved.acc_req_id))
+      .where(isNull(approved.deleted_at))
       .execute();
 
     const result = account_requests.reduce((acc: any[], item: any) => {
@@ -49,7 +50,7 @@ export const account_request_get = async (req: Request, res: Response) => {
 
 export const account_request_get_id = async (req: Request, res: Response) => {
   try {
-    const id: number = parseInt(req.params.id);
+    const id: string = req.params.id;
     const account_requests = await db
       .select()
       .from(account_request)
@@ -145,9 +146,10 @@ export const account_request_post = async (req: Request, res: Response) => {
 
 export const account_request_delete = async (req: Request, res: Response) => {
   try {
-    const id: number = parseInt(req.params.id);
+    const id: string = req.params.id;
     await db
-      .delete(account_request)
+      .update(account_request)
+      .set({ deleted_at: new Date() })
       .where(eq(account_request.id, id))
       .execute();
 

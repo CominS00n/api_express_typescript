@@ -2,7 +2,7 @@ CREATE TYPE "public"."account_type" AS ENUM('Permanent', 'Temporary');--> statem
 CREATE TYPE "public"."req_type" AS ENUM('New Account', 'Terminate', 'Reset Password', 'Change');--> statement-breakpoint
 CREATE TYPE "public"."status" AS ENUM('Pending', 'Approved', 'Rejected');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "log_activity" (
-	"log_id" serial PRIMARY KEY NOT NULL,
+	"log_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"activity_user" varchar(100) NOT NULL,
 	"activity_details" varchar(100) NOT NULL,
 	"activity_date" date NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS "log_activity" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "account_request" (
-	"acc_req_id" serial PRIMARY KEY NOT NULL,
+	"acc_req_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"full_name" varchar(100) NOT NULL,
 	"position" varchar(100) NOT NULL,
 	"company" varchar(100) NOT NULL,
@@ -27,12 +27,13 @@ CREATE TABLE IF NOT EXISTS "account_request" (
 	"user_type" text[] NOT NULL,
 	"status" "status" DEFAULT 'Pending' NOT NULL,
 	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
+	"updated_at" timestamp DEFAULT now(),
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "approved" (
-	"approve_id" serial PRIMARY KEY NOT NULL,
-	"acc_req_id" integer NOT NULL,
+	"approve_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"acc_req_id" uuid NOT NULL,
 	"approved_type" varchar(50) NOT NULL,
 	"approved_name" varchar(100) NOT NULL,
 	"approved_email" varchar(150) NOT NULL,
@@ -41,57 +42,61 @@ CREATE TABLE IF NOT EXISTS "approved" (
 	"approved_status" "status" DEFAULT 'Pending' NOT NULL,
 	"approved_date" date,
 	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
+	"updated_at" timestamp DEFAULT now(),
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "permission" (
-	"perm_id" serial PRIMARY KEY NOT NULL,
+	"perm_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"perm_name" varchar(100) NOT NULL,
 	"description" text,
 	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
+	"updated_at" timestamp DEFAULT now(),
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "role_permission" (
-	"role_id" integer NOT NULL,
-	"permission_id" integer NOT NULL,
+	"role_id" uuid NOT NULL,
+	"permission_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "role" (
-	"role_id" serial PRIMARY KEY NOT NULL,
+	"role_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"role_name" varchar(100) NOT NULL,
 	"description" text,
 	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
+	"updated_at" timestamp DEFAULT now(),
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "group" (
-	"group_id" serial PRIMARY KEY NOT NULL,
+	"group_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"group_name" varchar(100),
 	"description" varchar(255) NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
+	"deleted_at" timestamp,
 	CONSTRAINT "group_group_name_unique" UNIQUE("group_name")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_group" (
-	"user_id" integer NOT NULL,
-	"group_id" integer NOT NULL,
+	"user_id" uuid NOT NULL,
+	"group_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_role" (
-	"user_id" integer NOT NULL,
-	"role_id" integer NOT NULL,
+	"user_id" uuid NOT NULL,
+	"role_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
-	"user_id" serial PRIMARY KEY NOT NULL,
+	"user_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"username" varchar(100) NOT NULL,
 	"password" varchar(100) NOT NULL,
 	"name" varchar(100) NOT NULL,
