@@ -30,6 +30,7 @@ export const sendMail = async (
 
   const token = jwt.sign({
     id: html.em_id,
+    email: to,
   }, "supersecret", { expiresIn: "24h" });
 
   console.log(token);
