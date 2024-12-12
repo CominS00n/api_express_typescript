@@ -11,6 +11,7 @@ export const approved_put = async (req: Request, res: Response) => {
   try {
     const result = req.body;
     const status = result.status as "Pending" | "Approved" | "Rejected";
+    console.log(result);
 
     const response = await db
       .update(approved)
@@ -29,6 +30,20 @@ export const approved_put = async (req: Request, res: Response) => {
       return;
     }
 
+    if (status === "Rejected") {
+      try {
+        await db
+          .update(account_request)
+          .set({ status: "Rejected" })
+          .where(eq(account_request.id, result.acc_req_id))
+          .execute();
+      } catch (error) {
+        console.error(error);
+      }
+      res.status(200).json({ message: "Rejected", status: 200 });
+      return;
+    } else {
+    }
     const data = await db
       .select()
       .from(approved)
