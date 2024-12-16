@@ -35,6 +35,6 @@ app.use(
 
 app.use("/api/v2", route);
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0',() => {
   console.log(`Server is running on port ${port}`);
 });

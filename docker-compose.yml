@@ -1,9 +1,9 @@
-version: '3.9'
+version: '3.8'
 
 services:
   postgres:
     image: postgres:13
-    container_name: postgres
+    restart: always
     environment:
       POSTGRES_USER: sitthichai
       POSTGRES_PASSWORD: admin1234
@@ -20,6 +20,16 @@ services:
       - postgres
     ports:
       - "8080:8080"
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://sitthichai:admin1234@postgres:5432/rct_account
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    command: npm run start
 
 volumes:
   postgres-data:

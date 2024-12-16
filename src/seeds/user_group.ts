@@ -15,6 +15,6 @@ export const groupSeeds = async () => {
 export const userGroupSeeds = async () => {
   await db
     .insert(userGroup)
-    .values([{ user_id: 1, group_id: 1 }])
+    .values([{ user_id: "1", group_id: "1" }])
     .execute();
 };
