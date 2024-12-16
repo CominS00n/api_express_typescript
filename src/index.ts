@@ -10,8 +10,7 @@ import route from "./routes/index";
 dotenv.config();
 
 const app: Express = express();
-const port: number = 8000;
-
+const port = Number(process.env.PORT) || 8000;
 app.use(express.json());
 app.use(
   cors({
@@ -24,11 +23,24 @@ app.use(
 );
 app.use(cookieParser());
 
+
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN?.split(","),
+    credentials: true,
+  })
+);
+
 app.use(
   session({
-    secret: "supersecret",
+    secret: process.env.SESSION_SECRET || "fallbacksecret",
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "strict",
+    },
   })
 );
 
@@ -39,6 +51,6 @@ const httpsOptions = {
   cert: fs.readFileSync("server.cert"),
 };
 
-https.createServer(httpsOptions, app).listen(port, '0.0.0.0', () => {
+https.createServer(httpsOptions, app).listen(port, "0.0.0.0", () => {
   console.log(`Server is running on port ${port}`);
 });
