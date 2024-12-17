@@ -6,7 +6,7 @@ import { userGroup } from "../models/users/user_groups";
 import { permission } from "../models/role_permissions/permissions";
 import { rolePermission } from "../models/role_permissions/role_permissions";
 
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { userRole } from "../models/users/user_roles";
 

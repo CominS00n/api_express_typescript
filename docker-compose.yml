@@ -23,8 +23,9 @@ services:
 
   app:
     build: .
+    restart: always
     environment:
-      DATABASE_URL: postgres://sitthichai:admin1234@postgres:5435/rct_account
+      DATABASE_URL: postgres://sitthichai:admin1234@postgres:5432/rct_account
     ports:
       - "8000:8000"
     depends_on:
