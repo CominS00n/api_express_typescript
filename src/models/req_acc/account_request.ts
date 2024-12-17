@@ -26,6 +26,7 @@ export const account_request = pgTable("account_request", {
   service_type: text("service_type").array().notNull(), // array of text
   user_type: text("user_type").array().notNull(), // array of text
   status: status("status").default("Pending").notNull(),
+  remarks: text("req_remarks"),
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
   deleted_at: timestamp("deleted_at"),
