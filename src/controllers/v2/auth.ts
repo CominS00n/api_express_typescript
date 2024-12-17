@@ -29,7 +29,9 @@ export const login = async (req: Request, res: Response) => {
     } else {
       const token = jwt.sign(
         {
-          id: result.user_id,
+          username: result.user_name,
+          name: result.user_name,
+          role: result.role_name,
         },
         "supersecret",
         { expiresIn: "5h" }

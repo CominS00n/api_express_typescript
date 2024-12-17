@@ -4,3 +4,4 @@ package-lock.json
 migration
 *.cert
 *.key
+dist
