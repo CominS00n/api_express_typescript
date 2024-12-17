@@ -4,7 +4,6 @@ import {
   date,
   text,
   timestamp,
-  integer,
   uuid,
 } from "drizzle-orm/pg-core";
 import { account_request } from "./account_request";
@@ -30,9 +29,12 @@ export const approved = pgTable("approved", {
 });
 
 // relations 1 to many
-export const accountRequestRelation = relations(account_request, ({ many }) => ({
-  approved: many(approved),
-}));
+export const accountRequestRelation = relations(
+  account_request,
+  ({ many }) => ({
+    approved: many(approved),
+  })
+);
 
 export const approvedRelations = relations(approved, ({ one }) => ({
   accountRequest: one(account_request, {
@@ -40,5 +42,3 @@ export const approvedRelations = relations(approved, ({ one }) => ({
     references: [account_request.id],
   }),
 }));
-
-

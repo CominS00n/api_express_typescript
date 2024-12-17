@@ -12,18 +12,16 @@ dotenv.config();
 const app: Express = express();
 const port = Number(process.env.PORT) || 8000;
 app.use(express.json());
-app.use(
-  cors({
-    origin: [
-      "http://localhost:3000",
-      "https://rtc-template-frontend.vercel.app",
-    ],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:3000",
+//       "https://rtc-template-frontend.vercel.app",
+//     ],
+//     credentials: true,
+//   })
+// );
 app.use(cookieParser());
-
-
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN?.split(","),
@@ -53,4 +51,6 @@ const httpsOptions = {
 
 https.createServer(httpsOptions, app).listen(port, "0.0.0.0", () => {
   console.log(`Server is running on port ${port}`);
+}).on('error', (err) => {
+  console.error('Failed to start server:', err);
 });

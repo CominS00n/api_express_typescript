@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { and, eq, ne } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { db } from "../../config/connect";
 import { approved } from "../../models/req_acc/approved";
 import { account_request } from "../../models/req_acc/account_request";
 import { sendMail } from "../../middleware/sendEmail";
 import type { em } from "../../types";
+import logActivity, { activityCode } from "../../middleware/createLog";
 
 export const approved_put = async (req: Request, res: Response) => {
   try {
     const result = req.body;
     const status = result.status as "Pending" | "Approved" | "Rejected";
-    console.log(result);
 
     const response = await db
       .update(approved)
@@ -37,6 +37,9 @@ export const approved_put = async (req: Request, res: Response) => {
           .set({ status: "Rejected" })
           .where(eq(account_request.id, result.acc_req_id))
           .execute();
+
+        // create log
+        logActivity(activityCode.APPROVED, result.name, "Rejected", "Rejected");
       } catch (error) {
         console.error(error);
       }
@@ -67,6 +70,14 @@ export const approved_put = async (req: Request, res: Response) => {
         };
         const cc: string = "";
         sendMail(from, to, subject, mailTemplate, cc);
+
+        // create log
+        logActivity(
+          activityCode.APPROVED,
+          data[0].name,
+          "Approved",
+          "Approved"
+        );
       } catch (error) {
         console.error(error);
       }

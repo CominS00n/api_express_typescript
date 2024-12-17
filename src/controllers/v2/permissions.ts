@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../../config/connect";
 import { permission } from "../../models/role_permissions/permissions";
 
-import logActivity, { LogActivity } from "../../middleware/createLog";
+// import logActivity, { LogActivity } from "../../middleware/createLog";
 
 export const permissions_get = async (req: Request, res: Response) => {
   try {
@@ -40,13 +40,13 @@ export const permissions_get_by_id = async (req: Request, res: Response) => {
 
 export const permissions_post = async (req: Request, res: Response) => {
   try {
-    let logData: LogActivity = {
-      activityUser: req.cookies.user.name,
-      activityDetails: "Permission created",
-      activityDate: new Date().toISOString(),
-    };
+    // let logData: LogActivity = {
+    //   activityUser: req.cookies.user.name,
+    //   activityDetails: "Permission created",
+    //   activityDate: new Date().toISOString(),
+    // };
+    // await logActivity(logData);
     await db.insert(permission).values(req.body).execute();
-    await logActivity(logData);
     res.status(201).json({ message: "Permission created", status: 201 });
   } catch (error) {
     res

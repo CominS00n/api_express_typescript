@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar, timestamp, uuid } from "drizzle-orm/pg-core";
+import { pgTable, varchar, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const group = pgTable("group", {
   id: uuid("group_id").primaryKey().defaultRandom(),

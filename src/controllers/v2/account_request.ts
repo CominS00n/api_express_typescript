@@ -1,4 +1,4 @@
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import { eq, isNull } from "drizzle-orm";
 
 import { db } from "../../config/connect";
@@ -8,7 +8,8 @@ import { sendMail } from "../../middleware/sendEmail";
 
 import type { em } from "../../types";
 
-import logActivity, { LogActivity } from "../../middleware/createLog";
+import logActivity, { activityCode } from "../../middleware/createLog";
+import { users } from "../../models/users/users";
 
 export const account_request_get = async (req: Request, res: Response) => {
   try {
@@ -115,26 +116,23 @@ export const account_request_post = async (req: Request, res: Response) => {
       const from: string = "spuckpoo@gmail.com";
       const to: string = `${emailData[0].email}`;
       const subject: string = "New Account Request";
-      // const mailTemplate: string =
-      //   `<h1>New Account Request</h1> <a href="http://localhost:3000/test-data/${id}">Google</a>`;
       const mailTemplate: em = {
         em_id: id,
         em_name: emailData[0].name,
       };
       const cc: string = "spuckpooforwork@gmail.com";
       sendMail(from, to, subject, mailTemplate, cc);
+
+      // create log
+      logActivity(
+        activityCode.CREATE,
+        req_data.full_name,
+        "Create",
+        "Send account request"
+      );
     } catch (error) {
       console.error(error);
     }
-
-    // let logData: LogActivity = {
-    //   activityUser: req_data.full_name,
-    //   activityDetails: "Account request created",
-    //   activityDate: new Date().toISOString(),
-    // };
-
-    // await logActivity(logData);
-
     res.status(201).json({ message: "Account request created", status: 201 });
   } catch (error) {
     console.error("Error creating account_request:", error);
@@ -153,13 +151,20 @@ export const account_request_delete = async (req: Request, res: Response) => {
       .where(eq(account_request.id, id))
       .execute();
 
-    const logData: LogActivity = {
-      activityUser: req.cookies.user.name,
-      activityDetails: "Account request deleted",
-      activityDate: new Date().toISOString(),
-    };
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, req.cookies.id))
+      .execute();
 
-    await logActivity(logData);
+    // create log
+    logActivity(
+      activityCode.DELETE,
+      user.values.name,
+      "Delete",
+      "Account request deleted"
+    );
+
     res.status(200).json({ message: "Account request deleted", status: 200 });
   } catch (error) {
     console.error("Error deleting account_request:", error);
