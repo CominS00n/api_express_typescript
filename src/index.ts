@@ -49,12 +49,12 @@ const httpsOptions = {
   cert: fs.readFileSync("server.cert"),
 };
 
-https.createServer(httpsOptions, app).listen(port, "0.0.0.0", () => {
-  console.log(`Server is running on port ${port}`);
-});
-
-// app.listen(port, () => {
+// https.createServer(httpsOptions, app).listen(port, "0.0.0.0", () => {
 //   console.log(`Server is running on port ${port}`);
-// }).on('error', (err) => {
-//   console.error('Failed to start server:', err);
 // });
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+}).on('error', (err) => {
+  console.error('Failed to start server:', err);
+});
