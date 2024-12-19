@@ -1,12 +1,34 @@
-import { Request, Response } from "express";
 import nodemailer from "nodemailer";
 import winston from "winston";
 import dotenv from "dotenv";
 
 import { db } from "../../config/connect";
+import { eq } from "drizzle-orm";
+import { account_request } from "../../models/req_acc/account_request";
 import jwt from "jsonwebtoken";
+import { createMail } from "../../middleware/createMail";
 
 dotenv.config();
+
+type ApprovalData = {
+  name: string;
+  id: string;
+  email: string;
+  date: string | null;
+  acc_req_id: string;
+  status: "Pending" | "Approved" | "Rejected";
+  created_at: Date | null;
+  updated_at: Date | null;
+  deleted_at: Date | null;
+  type: string;
+  signature: string | null;
+  remark: string | null;
+};
+type UserRequestData = {
+  user_name: string;
+  user_email: string;
+  user_date: Date | null;
+};
 
 const logger = winston.createLogger({
   level: "debug",
@@ -14,13 +36,9 @@ const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
 
-const generateEmailMessage = (html: string) => {
-  let message = ``;
-  return message;
-};
+export const sendMail = async (data: ApprovalData, cc: string, subject:string) => {
+  // const { from, to, subject, cc } = req.body;
 
-export const sendMail = async (req: Request, res: Response) => {
-  const { from, to, subject, html, cc } = req.body;
   const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: 587,
@@ -31,25 +49,42 @@ export const sendMail = async (req: Request, res: Response) => {
       pass: process.env.MAIL_PASSWORD,
     },
   });
-  let message = {
-    from: "Nodemailer <example@nodemailer.com>",
-    to: "Nodemailer <example@nodemailer.com>",
-    subject: "AMP4EMAIL message",
-    text: "For clients with plaintext support only",
-    html: "<p>For clients that do not support AMP4EMAIL or amp content is not valid</p>",
-    amp: `<!doctype html>
-    <html ⚡4email>
-      <head>
-        <meta charset="utf-8">
-        <style amp4email-boilerplate>body{visibility:hidden}</style>
-        <script async src="https://cdn.ampproject.org/v0.js"></script>
-        <script async custom-element="amp-anim" src="https://cdn.ampproject.org/v0/amp-anim-0.1.js"></script>
-      </head>
-      <body>
-        <p>Image: <amp-img src="https://cldup.com/P0b1bUmEet.png" width="16" height="16"/></p>
-        <p>GIF (requires "amp-anim" script in header):<br/>
-          <amp-anim src="https://cldup.com/D72zpdwI-i.gif" width="500" height="350"/></p>
-      </body>
-    </html>`,
-  };
+
+  const token = jwt.sign(
+    {
+      id: data.acc_req_id,
+      email: data.email,
+    },
+    "supersecret",
+    { expiresIn: "24h" }
+  );
+  const ccMail = cc.split(",");
+  const userRequestData: UserRequestData = await db
+    .select({
+      user_name: account_request.full_name,
+      user_email: account_request.email,
+      user_date: account_request.created_at,
+    })
+    .from(account_request)
+    .where(eq(account_request.id, data.acc_req_id))
+    .execute()
+    .then((res) => res[0]);
+
+  const message = await createMail(
+    ccMail,
+    subject,
+    data,
+    userRequestData,
+    token
+  );
+  logger.info(`Sending mail to - ${data.email}`);
+
+  transporter.sendMail(message, (error, info) => {
+    if (error) {
+      logger.error(`Error sending mail - ${error}`);
+    } else {
+      logger.info(`Email sent: ${info.response}`);
+    }
+  });
+  return "Mail sent";
 };

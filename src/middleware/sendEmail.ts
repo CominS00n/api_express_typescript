@@ -21,7 +21,9 @@ export const sendMail = async (
   cc: string
 ) => {
   const transporter = nodemailer.createTransport({
-    service: process.env.MAIL_HOST,
+    host: process.env.MAIL_HOST,
+    port: 587,
+    secure: false,
     auth: {
       user: process.env.MAIL_USERNAME,
       pass: process.env.MAIL_PASSWORD,
@@ -32,8 +34,6 @@ export const sendMail = async (
     id: html.em_id,
     email: to,
   }, "supersecret", { expiresIn: "24h" });
-
-  console.log(token);
 
   const message: string = `
   <div class="container">

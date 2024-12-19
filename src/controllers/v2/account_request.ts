@@ -4,9 +4,12 @@ import { eq, isNull } from "drizzle-orm";
 import { db } from "../../config/connect";
 import { account_request } from "../../models/req_acc/account_request";
 import { approved } from "../../models/req_acc/approved";
-import { sendMail } from "../../middleware/sendEmail";
+import { sendMail } from "./send_email";
 
-import type { em } from "../../types";
+enum subject {
+  NEW = "New Request Account (RTC)",
+  OLD = "Tracking Request Account (RTC)",
+}
 
 import logActivity, { activityCode } from "../../middleware/createLog";
 import { users } from "../../models/users/users";
@@ -113,23 +116,8 @@ export const account_request_post = async (req: Request, res: Response) => {
 
     //! Send email
     try {
-      const from: string = "spuckpoo@gmail.com";
-      const to: string = `${emailData[0].email}`;
-      const subject: string = "New Account Request";
-      const mailTemplate: em = {
-        em_id: id,
-        em_name: emailData[0].name,
-      };
-      const cc: string = "spuckpooforwork@gmail.com";
-      sendMail(from, to, subject, mailTemplate, cc);
-
-      // create log
-      logActivity(
-        activityCode.CREATE,
-        req_data.full_name,
-        "Create",
-        "Send account request"
-      );
+      const cc: string = process.env.MAIL_CC || "";
+      await sendMail(emailData[0], cc, subject.NEW);
     } catch (error) {
       console.error(error);
     }
