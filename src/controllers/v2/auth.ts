@@ -29,9 +29,7 @@ export const login = async (req: Request, res: Response) => {
     } else {
       const token = jwt.sign(
         {
-          username: result.user_name,
-          name: result.user_name,
-          role: result.role_name,
+          id: result.user_id,
         },
         "supersecret",
         { expiresIn: "5h" }
@@ -44,12 +42,12 @@ export const login = async (req: Request, res: Response) => {
       });
 
       // create log
-      logActivity(
-        activityCode.LOGIN,
-        result.user_name,
-        "User logged in",
-        "User logged in"
-      );
+      // logActivity(
+      //   activityCode.LOGIN,
+      //   result.user_name,
+      //   "User logged in",
+      //   "User logged in"
+      // );
       res.status(200).json({ message: "Login successful", status: 200 });
     }
   } catch (error) {
@@ -62,12 +60,12 @@ export const logout = async (req: Request, res: Response) => {
     res.clearCookie("token");
 
     // create log
-    logActivity(
-      activityCode.LOGOUT,
-      req.body.username,
-      "User logged out",
-      "User logged out"
-    );
+    // logActivity(
+    //   activityCode.LOGOUT,
+    //   req.body.username,
+    //   "User logged out",
+    //   "User logged out"
+    // );
     res.status(200).json({ message: "Logout successful", status: 200 });
   } catch (error) {
     res.status(400).json({ message: "Error logging out", status: 400 });
