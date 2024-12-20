@@ -6,10 +6,7 @@ import { account_request } from "../../models/req_acc/account_request";
 import { approved } from "../../models/req_acc/approved";
 import { sendMail } from "./send_email";
 
-enum subject {
-  NEW = "New Request Account (RTC)",
-  OLD = "Tracking Request Account (RTC)",
-}
+import { subjectEnum } from "../../types/enum";
 
 import logActivity, { activityCode } from "../../middleware/createLog";
 import { users } from "../../models/users/users";
@@ -117,7 +114,8 @@ export const account_request_post = async (req: Request, res: Response) => {
     //! Send email
     try {
       const cc: string = process.env.MAIL_CC || "";
-      await sendMail(emailData[0], cc, subject.NEW);
+      await sendMail(emailData[0], cc, subjectEnum.REQUEST);
+      await sendMail(emailData[0], cc, subjectEnum.WAITING);
     } catch (error) {
       console.error(error);
     }

@@ -7,28 +7,10 @@ import { eq } from "drizzle-orm";
 import { account_request } from "../../models/req_acc/account_request";
 import jwt from "jsonwebtoken";
 import { createMail } from "../../middleware/createMail";
+import { ApprovalData, UserRequestData } from "../../types";
+import { subjectEnum } from "../../types/enum";
 
 dotenv.config();
-
-type ApprovalData = {
-  name: string;
-  id: string;
-  email: string;
-  date: string | null;
-  acc_req_id: string;
-  status: "Pending" | "Approved" | "Rejected";
-  created_at: Date | null;
-  updated_at: Date | null;
-  deleted_at: Date | null;
-  type: string;
-  signature: string | null;
-  remark: string | null;
-};
-type UserRequestData = {
-  user_name: string;
-  user_email: string;
-  user_date: Date | null;
-};
 
 const logger = winston.createLogger({
   level: "debug",
@@ -36,9 +18,11 @@ const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
 
-export const sendMail = async (data: ApprovalData, cc: string, subject:string) => {
-  // const { from, to, subject, cc } = req.body;
-
+export const sendMail = async (
+  data: ApprovalData,
+  cc: string,
+  subject: string
+) => {
   const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: 587,
@@ -69,15 +53,8 @@ export const sendMail = async (data: ApprovalData, cc: string, subject:string) =
     .where(eq(account_request.id, data.acc_req_id))
     .execute()
     .then((res) => res[0]);
-
-  const message = await createMail(
-    ccMail,
-    subject,
-    data,
-    userRequestData,
-    token
-  );
-  logger.info(`Sending mail to - ${data.email}`);
+  const message = await createMail(ccMail, subject, data, userRequestData, token);
+  // logger.info(`Sending mail to - ${data.email}`);
 
   transporter.sendMail(message, (error, info) => {
     if (error) {
