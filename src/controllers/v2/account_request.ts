@@ -8,7 +8,7 @@ import { sendMail } from "./send_email";
 
 import { subjectEnum } from "../../types/enum";
 
-import logActivity, { activityCode } from "../../middleware/createLog";
+// import logActivity from "../../middleware/createLog";
 import { users } from "../../models/users/users";
 
 export const account_request_get = async (req: Request, res: Response) => {
@@ -116,6 +116,8 @@ export const account_request_post = async (req: Request, res: Response) => {
       const cc: string = process.env.MAIL_CC || "";
       await sendMail(emailData[0], cc, subjectEnum.REQUEST);
       await sendMail(emailData[0], cc, subjectEnum.WAITING);
+
+      // logActivity("CR", req.cookies.name, "Create", "Account request created");
     } catch (error) {
       console.error(error);
     }
@@ -144,13 +146,7 @@ export const account_request_delete = async (req: Request, res: Response) => {
       .execute();
 
     // create log
-    logActivity(
-      activityCode.DELETE,
-      user.values.name,
-      "Delete",
-      "Account request deleted"
-    );
-
+    // logActivity("DL", user[0].name, "Delete", "Account request deleted");
     res.status(200).json({ message: "Account request deleted", status: 200 });
   } catch (error) {
     console.error("Error deleting account_request:", error);

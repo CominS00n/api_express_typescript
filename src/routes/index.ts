@@ -95,4 +95,6 @@ route.get(
   log.log_activity_get
 );
 
+route.post("/log_activity", log.log_activity_post);
+
 export default route;

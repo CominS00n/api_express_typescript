@@ -1,3 +1,5 @@
+import { activityCode } from "./enum";
+
 export type em = {
   em_name: string;
   em_id: string;
@@ -22,4 +24,11 @@ export type UserRequestData = {
   user_name: string;
   user_email: string;
   user_date: Date | null;
+};
+
+export type LogActivity = {
+  activityCode: activityCode;
+  activityUser: string;
+  activityAction: string;
+  activityDetails: string;
 };

@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import { db } from "../../config/connect";
 import { users } from "../../models/users/users";
 import { userViews } from "../../models/view_table/user_views";
-import logActivity, { activityCode } from "../../middleware/createLog";
+// import logActivity from "../../middleware/createLog";
 
 const ageCookie = 1000 * 60 * 60 * 5; // 5 hours
 
@@ -42,12 +42,7 @@ export const login = async (req: Request, res: Response) => {
       });
 
       // create log
-      // logActivity(
-      //   activityCode.LOGIN,
-      //   result.user_name,
-      //   "User logged in",
-      //   "User logged in"
-      // );
+      // logActivity("LI", result.user_name, "User logged in", "User logged in");
       res.status(200).json({ message: "Login successful", status: 200 });
     }
   } catch (error) {
@@ -58,14 +53,6 @@ export const login = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response) => {
   try {
     res.clearCookie("token");
-
-    // create log
-    // logActivity(
-    //   activityCode.LOGOUT,
-    //   req.body.username,
-    //   "User logged out",
-    //   "User logged out"
-    // );
     res.status(200).json({ message: "Logout successful", status: 200 });
   } catch (error) {
     res.status(400).json({ message: "Error logging out", status: 400 });
@@ -86,7 +73,7 @@ export const register = async (req: Request, res: Response) => {
     await db.insert(users).values(data).execute();
 
     // create log
-    logActivity(activityCode.CREATE, name, "User created", "User created");
+    // logActivity("CR", name, "User created", "User created");
     res.status(201).json({ message: "User created", status: 201 });
   } catch (error) {
     res.status(500).json({ message: "User creation failed", status: 500 });

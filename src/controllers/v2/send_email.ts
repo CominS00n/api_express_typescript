@@ -8,7 +8,7 @@ import { account_request } from "../../models/req_acc/account_request";
 import jwt from "jsonwebtoken";
 import { createMail } from "../../middleware/createMail";
 import { ApprovalData, UserRequestData } from "../../types";
-import { subjectEnum } from "../../types/enum";
+// import { subjectEnum } from "../../types/enum";
 
 dotenv.config();
 
