@@ -13,13 +13,12 @@ const ageCookie = 1000 * 60 * 60 * 5; // 5 hours
 export const login = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
-    const users = await db
+    const usersLogin = await db
       .select()
       .from(userViews)
       .where(eq(userViews.user_username, username))
-      .limit(1)
       .execute();
-    const result = users[0];
+    const result = usersLogin[0];
 
     const match = await bcrypt.compare(password, result.user_password);
     if (!match) {
@@ -27,6 +26,10 @@ export const login = async (req: Request, res: Response) => {
         .status(400)
         .json({ message: "Invalid user or password", status: 400 });
     } else {
+      const roles = [...new Set(usersLogin.map((user) => user.role_name))];
+      const permissions = usersLogin.map((user) => user.permission_name);
+      const groups = [...new Set(usersLogin.map((user) => user.group_name))];
+
       const token = jwt.sign(
         {
           id: result.user_id,
@@ -41,9 +44,19 @@ export const login = async (req: Request, res: Response) => {
         sameSite: "none",
       });
 
+      // create json object
+      const res_data = {
+        name: result.user_name,
+        roles: roles,
+        permissions: permissions,
+        groups: groups,
+      };
+
       // create log
       // logActivity("LI", result.user_name, "User logged in", "User logged in");
-      res.status(200).json({ message: "Login successful", status: 200 });
+      res
+        .status(200)
+        .json({ message: "Login successful", data: res_data, status: 200 });
     }
   } catch (error) {
     res.status(400).json({ message: "Invalid user or password", status: 400 });

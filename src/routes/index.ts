@@ -25,7 +25,7 @@ route.post(
 // path: /users
 route.get(
   "/users",
-  [authenticateToken, checkPermissions(["userRead"])],
+  // [authenticateToken, checkPermissions(["userRead"])],
   user.users_get
 );
 route.get(
@@ -35,7 +35,7 @@ route.get(
 );
 route.post(
   "/users",
-  [authenticateToken, checkPermissions(["userCreate"])],
+  // [authenticateToken, checkPermissions(["userCreate"])],
   user.users_post
 );
 route.delete(
