@@ -23,8 +23,8 @@ export const login = async (req: Request, res: Response) => {
     const match = await bcrypt.compare(password, result.user_password);
     if (!match) {
       res
-        .status(400)
-        .json({ message: "Invalid user or password", status: 400 });
+        .status(401)
+        .json({ message: "Invalid user or password", status: 401 });
     } else {
       const roles = [...new Set(usersLogin.map((user) => user.role_name))];
       const permissions = usersLogin.map((user) => user.permission_name);
@@ -59,16 +59,20 @@ export const login = async (req: Request, res: Response) => {
         .json({ message: "Login successful", data: res_data, status: 200 });
     }
   } catch (error) {
-    res.status(400).json({ message: "Invalid user or password", status: 400 });
+    res.status(401).json({ message: "Invalid user or password", status: 401 });
   }
 };
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
     res.status(200).json({ message: "Logout successful", status: 200 });
   } catch (error) {
-    res.status(400).json({ message: "Error logging out", status: 400 });
+    res.status(401).json({ message: "Error logging out", status: 401 });
   }
 };
 
