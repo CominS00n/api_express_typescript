@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
-import { eq } from "drizzle-orm";
+import { eq, isNull } from "drizzle-orm";
 import { db } from "../../config/connect";
 import { implementor } from "../../models/req_acc/implementor";
 // import logActivity from "../../middleware/createLog";
 
 export const getImplementor = async (req: Request, res: Response) => {
   try {
-    const implementors = await db.select().from(implementor).execute();
+    const implementors = await db
+      .select()
+      .from(implementor)
+      .where(isNull(implementor.deleted_at))
+      .execute();
     res.status(200).json({ data: implementors, status: 200 });
   } catch (error) {
     res
@@ -17,10 +21,11 @@ export const getImplementor = async (req: Request, res: Response) => {
 
 export const getImplementorById = async (req: Request, res: Response) => {
   try {
+    const id = req.params.id;
     const implementors = await db
       .select()
       .from(implementor)
-      .where(eq(implementor.id, req.params.id))
+      .where(eq(implementor.id, id))
       .execute();
     res.status(200).json({ data: implementors, status: 200 });
   } catch (error) {
@@ -30,9 +35,8 @@ export const getImplementorById = async (req: Request, res: Response) => {
 
 export const createImplementor = async (req: Request, res: Response) => {
   try {
-    const { name, email, acc_cr } = req.body;
+    const { name, email } = req.body;
     await db.insert(implementor).values({ name, email }).execute();
-    // logActivity("CR", acc_cr, "Implementor created", "Implementor created");
     res.status(200).json({ message: "Implementor created", status: 200 });
   } catch (error) {
     res
@@ -59,9 +63,11 @@ export const updateImplementor = async (req: Request, res: Response) => {
 
 export const deleteImplementor = async (req: Request, res: Response) => {
   try {
+    const id = req.params.id;
     await db
-      .delete(implementor)
-      .where(eq(implementor.id, req.params.id))
+      .update(implementor)
+      .set({ deleted_at: new Date() })
+      .where(eq(implementor.id, id))
       .execute();
     res.status(200).json({ message: "Implementor deleted", status: 200 });
   } catch (error) {

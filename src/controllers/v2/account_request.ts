@@ -10,6 +10,7 @@ import { subjectEnum } from "../../types/enum";
 
 // import logActivity from "../../middleware/createLog";
 import { users } from "../../models/users/users";
+import exp from "constants";
 
 export const account_request_get = async (req: Request, res: Response) => {
   try {
@@ -153,5 +154,24 @@ export const account_request_delete = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ message: "Error deleting account_request", status: 500 });
+  }
+};
+
+export const account_request_put = async (req: Request, res: Response) => {
+  try {
+    const req_data = req.body;
+    const id: string = req.params.id;
+    await db
+      .update(account_request)
+      .set({ remarks: req_data.remarks })
+      .where(eq(account_request.id, id))
+      .execute();
+
+    res.status(200).json({ message: "Account request updated", status: 200 });
+  } catch (error) {
+    console.error("Error updating account_request:", error);
+    res
+      .status(500)
+      .json({ message: "Error updating account_request", status: 500 });
   }
 };
