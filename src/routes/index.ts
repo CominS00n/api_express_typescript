@@ -84,6 +84,11 @@ route.get(
   [authenticateToken, checkPermissions(["roleRead"])],
   role.role_get
 );
+route.post(
+  "/roles",
+  [authenticateToken, checkPermissions(["roleCreate"])],
+  role.role_post
+);
 route.get(
   "/role-perm",
   [authenticateToken, checkPermissions(["rolePermRead"])],
