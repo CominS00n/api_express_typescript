@@ -15,6 +15,9 @@ export const usersSeeds = async () => {
   const password: string = "admin";
   const name: string = "sitthihai puckpoo";
   const email: string = "spuckpoo@gmail.com";
+  const position: string = "admin";
+  const company: string = "admin";
+  const division: string = "admin";
   const hashedPassword: string = await bcrypt.hash(password, 10);
   const phone = "0812345678";
   // create data for user, role, group, permission
@@ -42,6 +45,9 @@ export const usersSeeds = async () => {
       { name: "reqAccountRead", description: "read request account" },
       { name: "reqAccountUpdate", description: "update request account" },
       { name: "reqAccountDelete", description: "delete request account" },
+      {name: "groupCreate", description: "create group" },
+      {name: "groupUpdate", description: "update group" },
+      {name: "groupDelete", description: "delete group" },
       { name: "logRead", description: "read log" },
     ])
     .execute();
@@ -51,6 +57,9 @@ export const usersSeeds = async () => {
       username: username,
       password: hashedPassword,
       name: name,
+      position: position,
+      company: company,
+      division: division,
       email: email,
       phone: phone,
     })

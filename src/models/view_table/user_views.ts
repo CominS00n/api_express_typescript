@@ -13,6 +13,9 @@ export const userViews = pgView("user_views").as((qb) =>
     .select({
         user_id: users.id,
         user_name: users.name,
+        user_position: users.position,
+        user_company: users.company,
+        user_division: users.division,
         user_email: users.email,
         user_username: users.username,
         user_password: users.password,

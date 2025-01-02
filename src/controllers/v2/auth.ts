@@ -28,7 +28,7 @@ export const login = async (req: Request, res: Response) => {
     } else {
       const roles = [...new Set(usersLogin.map((user) => user.role_name))];
       const permissions = usersLogin.map((user) => user.permission_name);
-      const groups = [...new Set(usersLogin.map((user) => user.group_name))];
+      const groups = [...new Set(usersLogin.map((user) => user.group_id))];
 
       const token = jwt.sign(
         {
@@ -78,12 +78,24 @@ export const logout = async (req: Request, res: Response) => {
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { username, password, name, email, phone } = req.body;
+    const {
+      username,
+      password,
+      name,
+      email,
+      phone,
+      position,
+      company,
+      division,
+    } = req.body;
     const hashedPassword: string = await bcrypt.hash(password, 10);
     const data = {
       username,
       password: hashedPassword,
       name,
+      position,
+      company,
+      division,
       email,
       phone,
     };

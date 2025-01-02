@@ -11,6 +11,7 @@ import * as role from "../controllers/v2/role";
 import * as rolePermission from "../controllers/v2/role_permission";
 import * as approved from "../controllers/v2/approved";
 import * as implementor from "../controllers/v2/implementor";
+import * as group from "../controllers/v2/group";
 
 const route = Router();
 
@@ -33,6 +34,11 @@ route.get(
   "/users/:id",
   [authenticateToken, checkPermissions(["userRead"])],
   user.users_get_id
+);
+route.get(
+  "/users/group/:group",
+  [authenticateToken, checkPermissions(["userRead"])],
+  user.get_users_by_group
 );
 route.post(
   "/users",
@@ -89,10 +95,29 @@ route.post(
   [authenticateToken, checkPermissions(["roleCreate"])],
   role.role_post
 );
+route.delete(
+  "/roles/:id",
+  [authenticateToken, checkPermissions(["roleDelete"])],
+  role.role_delete
+);
+route.put(
+  "/roles/:id",
+  [authenticateToken, checkPermissions(["roleUpdate"])],
+  role.role_put
+);
 route.get(
   "/role-perm",
   [authenticateToken, checkPermissions(["rolePermRead"])],
   rolePermission.role_perm_get
+);
+
+// path: /group
+route.get("/groups", group.group_get_all);
+route.get("/group/:id", group.group_get_id);
+route.post(
+  "/group",
+  [authenticateToken, checkPermissions(["groupCreate"])],
+  group.group_post
 );
 
 //path: /log_activity

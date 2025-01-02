@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { eq } from "drizzle-orm";
+import { eq, ne } from "drizzle-orm";
 
 import { db } from "../../config/connect";
 import { role } from "../../models/role_permissions/roles";
@@ -24,6 +24,7 @@ export const role_perm_get = async (req: Request, res: Response) => {
       .from(role)
       .leftJoin(rolePermission, eq(role.id, rolePermission.role_id))
       .leftJoin(permission, eq(rolePermission.permission_id, permission.id))
+      .where(ne(role.name, "super-admin"))
       .execute();
 
     const result = rolePermissions.reduce((acc: any[], row: any) => {
