@@ -33,21 +33,13 @@ export const usersSeeds = async () => {
       { name: "roleRead", description: "read role" },
       { name: "roleUpdate", description: "update role" },
       { name: "roleDelete", description: "delete role" },
-      { name: "permCreate", description: "create permission" },
-      { name: "permRead", description: "read permission" },
-      { name: "permUpdate", description: "update permission" },
-      { name: "permDelete", description: "delete permission" },
-      { name: "rolePermCreate", description: "create role permission" },
       { name: "rolePermRead", description: "read role permission" },
-      { name: "rolePermUpdate", description: "update role permission" },
-      { name: "rolePermDelete", description: "delete role permission" },
-      { name: "reqAccountCreate", description: "create request account" },
       { name: "reqAccountRead", description: "read request account" },
       { name: "reqAccountUpdate", description: "update request account" },
       { name: "reqAccountDelete", description: "delete request account" },
-      {name: "groupCreate", description: "create group" },
-      {name: "groupUpdate", description: "update group" },
-      {name: "groupDelete", description: "delete group" },
+      { name: "groupCreate", description: "create group" },
+      { name: "groupUpdate", description: "update group" },
+      { name: "groupDelete", description: "delete group" },
       { name: "logRead", description: "read log" },
     ])
     .execute();
@@ -67,12 +59,12 @@ export const usersSeeds = async () => {
     .execute();
   const role_result = await db
     .insert(role)
-    .values({ name: "super-admin", description: "administrator" })
+    .values({ name: "super_admin", description: "administrator" })
     .returning()
     .execute();
   const group_result = await db
     .insert(group)
-    .values({ name: "admin", description: "administrator" })
+    .values({ name: "super_admin", description: "administrator" })
     .returning()
     .execute();
   const permissions = await db

@@ -27,7 +27,7 @@ route.post(
 // path: /users
 route.get(
   "/users",
-  // [authenticateToken, checkPermissions(["userRead"])],
+  [authenticateToken, checkPermissions(["userRead"])],
   user.users_get
 );
 route.get(
@@ -42,7 +42,7 @@ route.get(
 );
 route.post(
   "/users",
-  // [authenticateToken, checkPermissions(["userCreate"])],
+  [authenticateToken, checkPermissions(["userCreate"])],
   user.users_post
 );
 route.delete(
@@ -52,44 +52,29 @@ route.delete(
 );
 
 // path: /account_request
-route.get(
-  "/account_request",
-  [authenticateToken, checkPermissions(["reqAccountCreate"])],
-  acc.account_request_get
-);
 route.get("/account_request/:id", acc.account_request_get_id);
 route.post("/account_request", acc.account_request_post);
+route.put("/account_request/:id", acc.account_request_put);
+route.put("/account_request", approved.approved_put);
+route.get(
+  "/account_request",
+  [authenticateToken, checkPermissions(["reqAccountRead"])],
+  acc.account_request_get
+);
 route.delete(
   "/account_request/:id",
   [authenticateToken, checkPermissions(["reqAccountDelete"])],
   acc.account_request_delete
 );
-route.put("/account_request/:id", acc.account_request_put);
-route.put("/account_request", approved.approved_put);
 
 //path: /permissions
-route.get(
-  "/permissions",
-  [authenticateToken, checkPermissions(["permRead"])],
-  perm.permissions_get
-);
-route.get(
-  "/permissions/:id",
-  [authenticateToken, checkPermissions(["permRead"])],
-  perm.permissions_get_by_id
-);
-route.post(
-  "/permissions",
-  [authenticateToken, checkPermissions(["permCreate"])],
-  perm.permissions_post
-);
+route.get("/permissions", perm.permissions_get);
+route.get("/permissions/:id", perm.permissions_get_by_id);
+// route.post("/permissions", perm.permissions_post);
 
 //path: /role
-route.get(
-  "/roles",
-  [authenticateToken, checkPermissions(["roleRead"])],
-  role.role_get
-);
+route.get("/roles", role.role_get);
+route.get("/role-perm/:id", rolePermission.role_perm_get_by_id);
 route.post(
   "/roles",
   [authenticateToken, checkPermissions(["roleCreate"])],
@@ -119,6 +104,16 @@ route.post(
   [authenticateToken, checkPermissions(["groupCreate"])],
   group.group_post
 );
+route.delete(
+  "/group/:id",
+  [authenticateToken, checkPermissions(["groupDelete"])],
+  group.group_delete
+);
+route.put(
+  "/group/:id",
+  [authenticateToken, checkPermissions(["groupUpdate"])],
+  group.group_put
+);
 
 //path: /log_activity
 route.get(
@@ -126,7 +121,6 @@ route.get(
   [authenticateToken, checkPermissions(["logRead"])],
   log.log_activity_get
 );
-
 route.post("/log_activity", log.log_activity_post);
 
 // path: /implementor

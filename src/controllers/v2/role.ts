@@ -70,7 +70,7 @@ export const role_put = async (req: Request, res: Response) => {
       .delete(rolePermission)
       .where(eq(rolePermission.role_id, id))
       .execute();
-    const rolePermissionData = permissions.map((permissionId: number) => ({
+    const rolePermissionData = permissions.map((permissionId: string) => ({
       role_id: id,
       permission_id: permissionId,
     }));
@@ -79,5 +79,20 @@ export const role_put = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error updating role:", error);
     res.status(500).json({ message: "Error updating role", status: 500 });
+  }
+};
+
+export const role_get_id = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const roleData = await db
+      .select()
+      .from(role)
+      .where(eq(role.id, id))
+      .execute();
+    res.status(200).json({ message: "Role found", data: roleData, status: 200 });
+  } catch (error) {
+    console.error("Error getting role:", error);
+    res.status(500).json({ message: "Error getting role", status: 500 });
   }
 };
