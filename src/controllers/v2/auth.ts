@@ -46,6 +46,7 @@ export const login = async (req: Request, res: Response) => {
 
       // create json object
       const res_data = {
+        id: result.user_id,
         name: result.user_name,
         roles: roles,
         permissions: permissions,

@@ -11,9 +11,9 @@ import { eq } from "drizzle-orm";
 import { userRole } from "../models/users/user_roles";
 
 export const usersSeeds = async () => {
-  const username: string = "admin";
-  const password: string = "admin";
-  const name: string = "sitthihai puckpoo";
+  const username: string = "administration";
+  const password: string = "qZvy42]eDo42Di.";
+  const name: string = "sitthichai puckpoo";
   const email: string = "spuckpoo@gmail.com";
   const position: string = "admin";
   const company: string = "admin";

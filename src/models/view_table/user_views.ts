@@ -17,6 +17,7 @@ export const userViews = pgView("user_views").as((qb) =>
         user_company: users.company,
         user_division: users.division,
         user_email: users.email,
+        user_phone: users.phone,
         user_username: users.username,
         user_password: users.password,
         role_id: role.id,

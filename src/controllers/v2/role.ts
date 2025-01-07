@@ -29,7 +29,7 @@ export const role_post = async (req: Request, res: Response) => {
       .returning()
       .execute();
     const roleId = createRole[0].id;
-    const rolePermissionData = permissions.map((permissionId: number) => ({
+    const rolePermissionData = permissions.map((permissionId: string) => ({
       role_id: roleId,
       permission_id: permissionId,
     }));
@@ -64,7 +64,7 @@ export const role_put = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { name, description, permissions } = req.body;
-    const roleData = { name, description };
+    const roleData = { name, description, updated_at: new Date() };
     await db.update(role).set(roleData).where(eq(role.id, id)).execute();
     await db
       .delete(rolePermission)
@@ -90,7 +90,9 @@ export const role_get_id = async (req: Request, res: Response) => {
       .from(role)
       .where(eq(role.id, id))
       .execute();
-    res.status(200).json({ message: "Role found", data: roleData, status: 200 });
+    res
+      .status(200)
+      .json({ message: "Role found", data: roleData, status: 200 });
   } catch (error) {
     console.error("Error getting role:", error);
     res.status(500).json({ message: "Error getting role", status: 500 });

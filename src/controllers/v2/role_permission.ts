@@ -24,7 +24,7 @@ export const role_perm_get = async (req: Request, res: Response) => {
       .from(role)
       .leftJoin(rolePermission, eq(role.id, rolePermission.role_id))
       .leftJoin(permission, eq(rolePermission.permission_id, permission.id))
-      .where(ne(role.name, "super-admin"))
+      .where(ne(role.name, "super_admin"))
       .execute();
 
     const result = rolePermissions.reduce((acc: any[], row: any) => {

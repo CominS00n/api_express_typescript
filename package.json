@@ -10,7 +10,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
     "db:drop": "drizzle-kit drop",
-    "db:seed": "ts-node src/seeds/index.ts"
+    "db:seed": "ts-node src/seeds/index.ts",
+    "db:rollback": "ts-node src/config/dropDB.ts && ts-node src/config/createDB.ts && npm run db:migrate && npm run db:seed"
   },
   "keywords": [],
   "author": "",

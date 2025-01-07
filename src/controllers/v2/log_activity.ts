@@ -9,11 +9,6 @@ export const log_activity_get = async (req: Request, res: Response) => {
     const activities = await db
       .select()
       .from(log_activity)
-      .groupBy(
-        log_activity.activityUser,
-        log_activity.activityDetails,
-        log_activity.activityDate
-      )
       .execute();
     res
       .status(200)
@@ -34,7 +29,9 @@ export const log_activity_post = async (req: Request, res: Response) => {
   };
   try {
     await db.insert(log_activity).values(data).execute();
+    res.status(200).json({ message: "Activity logged", status: 200 });
   } catch (error) {
     console.error("Error logging activity:", error);
+    res.status(500).json({ message: "Error logging activity", status: 500 });
   }
 };

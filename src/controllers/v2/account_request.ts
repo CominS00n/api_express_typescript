@@ -8,10 +8,6 @@ import { sendMail } from "./send_email";
 
 import { subjectEnum } from "../../types/enum";
 
-// import logActivity from "../../middleware/createLog";
-import { users } from "../../models/users/users";
-import exp from "constants";
-
 export const account_request_get = async (req: Request, res: Response) => {
   try {
     const account_requests = await db
@@ -140,14 +136,6 @@ export const account_request_delete = async (req: Request, res: Response) => {
       .where(eq(account_request.id, id))
       .execute();
 
-    const user = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, req.cookies.id))
-      .execute();
-
-    // create log
-    // logActivity("DL", user[0].name, "Delete", "Account request deleted");
     res.status(200).json({ message: "Account request deleted", status: 200 });
   } catch (error) {
     console.error("Error deleting account_request:", error);

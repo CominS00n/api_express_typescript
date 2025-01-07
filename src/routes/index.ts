@@ -47,8 +47,13 @@ route.post(
 );
 route.delete(
   "/users/:id",
-  [authenticateToken, checkPermissions(["userUpdate"])],
+  [authenticateToken, checkPermissions(["userDelete"])],
   user.users_delete
+);
+route.put(
+  "/users/:id",
+  [authenticateToken, checkPermissions(["userUpdate"])],
+  user.users_put
 );
 
 // path: /account_request
@@ -116,12 +121,8 @@ route.put(
 );
 
 //path: /log_activity
-route.get(
-  "/log_activity",
-  [authenticateToken, checkPermissions(["logRead"])],
-  log.log_activity_get
-);
 route.post("/log_activity", log.log_activity_post);
+route.get("/log_activity", log.log_activity_get);
 
 // path: /implementor
 route.get("/implementor", implementor.getImplementor);
