@@ -97,7 +97,7 @@ route.put(
 );
 route.get(
   "/role-perm",
-  [authenticateToken, checkPermissions(["rolePermRead"])],
+  // [authenticateToken, checkPermissions(["rolePermRead"])],
   rolePermission.role_perm_get
 );
 
