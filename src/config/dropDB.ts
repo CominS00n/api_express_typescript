@@ -7,9 +7,10 @@ dotenv.config();
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
-  database: 'template1', // Connect to the default 'postgres' database
+  database: 'template1', 
   password: process.env.DB_PASS,
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+  ssl: false,
 });
 
 const dropDb = async () => {

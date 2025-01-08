@@ -7,11 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
-    "db:migrate": "drizzle-kit migrate",
+    "db:migrate": "sh ./scripts/db-migrate.sh",
     "db:generate": "drizzle-kit generate",
     "db:drop": "drizzle-kit drop",
     "db:seed": "ts-node src/seeds/index.ts",
-    "db:rollback": "ts-node src/config/dropDB.ts && ts-node src/config/createDB.ts && npm run db:migrate && npm run db:seed"
+    "db:rollback": "ts-node src/config/dropDB.ts && ts-node src/config/createDB.ts && npm run db:generate && npm run db:migrate && npm run db:seed"
   },
   "keywords": [],
   "author": "",

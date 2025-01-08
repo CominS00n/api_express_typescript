@@ -9,6 +9,7 @@ const pool = new Pool({
   database: 'template1',
   password: process.env.DB_PASS,
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+  ssl: false,
 });
 
 const createDb = async () => {
