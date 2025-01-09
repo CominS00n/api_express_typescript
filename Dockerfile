@@ -27,10 +27,10 @@ COPY wait-for-it.sh ./
 RUN npm run build
 
 # Expose the application port
-EXPOSE 8000
+EXPOSE 8002
 
 COPY entrypoint.sh ./
 
-CMD ["sh", "./entrypoint.sh"]
+CMD ["sh", "-c", "./wait-for-it.sh postgres 5432 -- npm run db:generate && npm run db:migrate && npm run db:seed && npm run start"]
 
 
