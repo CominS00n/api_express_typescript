@@ -1,6 +1,12 @@
 # Use a more recent version of Node.js
 FROM node:20-alpine
 
+# Install dependencies
+RUN apk add --no-cache bash curl postgresql-client
+
+# Download and install dockerize
+RUN curl -sSL https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-alpine-linux-amd64-v0.6.1.tar.gz | tar -C /usr/local/bin -xzv
+
 # Create app directory and set permissions
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 WORKDIR /home/node/app
@@ -29,8 +35,7 @@ RUN npm run build
 # Expose the application port
 EXPOSE 8002
 
+# Copy entrypoint script and set execute permissions
 COPY entrypoint.sh ./
 
-CMD ["sh", "-c", "./wait-for-it.sh postgres 5432 -- npm run db:generate && npm run db:migrate && npm run db:seed && npm run start"]
-
-
+CMD ["sh", "-c", "./entrypoint.sh"]
