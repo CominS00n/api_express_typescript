@@ -7,6 +7,8 @@ const switchMessage = async (
   userData: UserRequestData,
   token: string
 ) => {
+  const link_host = "http://192.168.21.25:82";
+
   const head = `
   <head>
     <meta charset="utf-8">
@@ -38,7 +40,7 @@ const switchMessage = async (
        <p>กรุณาดำเนินการอนุมัติคำขอผ่านลิงก์ด้านล่าง:</p>
        <a style="
             background-color: #facc15;
-            padding: 12px 24px;
+            padding: 6px 12px;
             border: none;
             border-radius: 10px;
             text-decoration: none;
@@ -47,7 +49,7 @@ const switchMessage = async (
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
               sans-serif;
           "
-          href="http://localhost:3000/approval/${token}"
+          href="${link_host}/approval/${token}"
         >
           Approved Request Account (RTC)
        </a>
@@ -78,7 +80,7 @@ const switchMessage = async (
          </div>
          <a style="
             background-color: #facc15;
-            padding: 12px 24px;
+            padding: 6px 12px;
             border: none;
             border-radius: 10px;
             text-decoration: none;
@@ -87,7 +89,7 @@ const switchMessage = async (
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
               sans-serif;
           "
-           href="http://localhost:3000/tacking/${approvalData.acc_req_id}">
+           href="${link_host}/tracking-status/id/${approvalData.acc_req_id}">
              ติดตามคำขอสร้างบัญชีผู้ใช้ (RTC Request Account)
          </a>
          <p>ขอแสดงความนับถือ,</p>
@@ -116,7 +118,7 @@ const switchMessage = async (
          <p>${approvalData.remark}</p>
          <a style="
             background-color: #facc15;
-            padding: 12px 24px;
+            padding: 6px 12px;
             border: none;
             border-radius: 10px;
             text-decoration: none;
@@ -125,7 +127,7 @@ const switchMessage = async (
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
               sans-serif;
           "
-           href="http://localhost:3000/tacking/${approvalData.acc_req_id}">
+           href="${link_host}/tracking-status/id/${approvalData.acc_req_id}">
              ติดตามคำขอสร้างบัญชีผู้ใช้ (RTC Request Account)
          </a>
          <p>ขอแสดงความนับถือ,</p>
@@ -154,7 +156,7 @@ const switchMessage = async (
          <p>${approvalData.remark}</p>
          <a style="
             background-color: #facc15;
-            padding: 12px 24px;
+            padding: 6px 12px;
             border: none;
             border-radius: 10px;
             text-decoration: none;
@@ -163,7 +165,7 @@ const switchMessage = async (
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
               sans-serif;
           "
-           href="http://localhost:3000/tacking/${approvalData.acc_req_id}">
+           href="${link_host}/tracking-status/id/${approvalData.acc_req_id}">
              ตรวสอบคำขอสร้างบัญชีผู้ใช้ (RTC Request Account)
          </a>
          <p>ขอแสดงความนับถือ,</p>
@@ -192,7 +194,7 @@ const switchMessage = async (
          <p>${approvalData.remark}</p>
          <a style="
             background-color: #facc15;
-            padding: 12px 24px;
+            padding: 6px 12px;
             border: none;
             border-radius: 10px;
             text-decoration: none;
@@ -201,7 +203,7 @@ const switchMessage = async (
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
               sans-serif;
           "
-           href="http://localhost:3000/tacking/${approvalData.acc_req_id}">
+           href="${link_host}/tracking-status/id/${approvalData.acc_req_id}">
              ตรวสอบคำขอสร้างบัญชีผู้ใช้ (RTC Request Account)
          </a>
          <p>ขอแสดงความนับถือ,</p>
@@ -223,10 +225,14 @@ export const createMail = async (
   const from: string = process.env.MAIL_USERNAME?.toString() || "";
   const html = await switchMessage(subject, approvalData, userData, token);
 
+  if (subject !== subjectEnum.REQUEST) {
+    cc.length = 0;
+  }
+
   let MailMessage = {
     from: `NT National Telecom  <${from}>`,
     to:
-      subject === subjectEnum.REQUEST 
+      subject === subjectEnum.REQUEST
         ? approvalData.email
         : userData.user_email,
     subject: `${subject} - (คุณ ${userData.user_name})`,

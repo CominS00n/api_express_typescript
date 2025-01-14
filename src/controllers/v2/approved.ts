@@ -7,7 +7,6 @@ import { account_request } from "../../models/req_acc/account_request";
 
 import { sendMail } from "./send_email";
 import { subjectEnum } from "../../types/enum";
-// import logActivity from "../../middleware/createLog";
 
 const cc = process.env.MAIL_CC || "";
 
@@ -24,9 +23,6 @@ export const approved_put = async (req: Request, res: Response) => {
           .where(eq(account_request.id, result.acc_req_id))
           .execute();
         await sendMail(result, cc, subjectEnum.REJECT);
-
-        // create log
-        // logActivity("RJ", result.name, "Rejected", "Rejected");
       } catch (error) {
         console.error(error);
       }
@@ -68,13 +64,6 @@ export const approved_put = async (req: Request, res: Response) => {
     if (data.length !== 0) {
       try {
         await sendMail(data[0], cc, subjectEnum.REQUEST);
-        // create log
-        // logActivity(
-        //   "AP",
-        //   data[0].name,
-        //   "Approved",
-        //   "Approved"
-        // );
       } catch (error) {
         console.error(error);
       }

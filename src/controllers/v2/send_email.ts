@@ -8,7 +8,6 @@ import { account_request } from "../../models/req_acc/account_request";
 import jwt from "jsonwebtoken";
 import { createMail } from "../../middleware/createMail";
 import { ApprovalData, UserRequestData } from "../../types";
-// import { subjectEnum } from "../../types/enum";
 
 dotenv.config();
 
@@ -54,7 +53,6 @@ export const sendMail = async (
     .execute()
     .then((res) => res[0]);
   const message = await createMail(ccMail, subject, data, userRequestData, token);
-  // logger.info(`Sending mail to - ${data.email}`);
 
   transporter.sendMail(message, (error, info) => {
     if (error) {
