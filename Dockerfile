@@ -23,9 +23,6 @@ USER node
 # Copy the rest of the application code
 COPY --chown=node:node . .
 
-# Copy SSL certificates
-COPY server.key server.cert ./
-
 # Copy wait-for-it script
 COPY wait-for-it.sh ./
 
