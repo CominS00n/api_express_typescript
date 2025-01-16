@@ -19,8 +19,19 @@ export const approved_put = async (req: Request, res: Response) => {
       try {
         await db
           .update(account_request)
-          .set({ status: "Rejected" })
+          .set({ status: status })
           .where(eq(account_request.id, result.acc_req_id))
+          .execute();
+        await db
+          .update(approved)
+          .set({ status: "Rejected" })
+          .where(
+            and(
+              eq(approved.acc_req_id, result.acc_req_id),
+              eq(approved.name, result.name),
+              eq(approved.email, result.email)
+            )
+          )
           .execute();
         await sendMail(result, cc, subjectEnum.REJECT);
       } catch (error) {

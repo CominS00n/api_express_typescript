@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 
+import { ne } from "drizzle-orm";
 import { db } from "../../config/connect";
 import { log_activity } from "../../models/log_activity";
+
 import { LogActivity } from "../../types";
 
 export const log_activity_get = async (req: Request, res: Response) => {
@@ -9,6 +11,7 @@ export const log_activity_get = async (req: Request, res: Response) => {
     const activities = await db
       .select()
       .from(log_activity)
+      .where(ne(log_activity.activityAction, "Login"))
       .execute();
     res
       .status(200)

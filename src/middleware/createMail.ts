@@ -76,7 +76,7 @@ const switchMessage = async (
           <p>รายละเอียดคำขอ:</p>
           <p>ชื่อผู้ขอ: ${userData.user_name}</p>
           <p>อีเมลผู้ขอ: ${userData.user_email}</p>
-          <p>วันที่ส่งคำขอ: ${userData.user_date}</p>
+          <p>วันที่ส่งคำขอ: ${userData.user_date?.toDateString()}</p>
          </div>
          <a style="
             background-color: #facc15;
@@ -112,7 +112,7 @@ const switchMessage = async (
           <p>รายละเอียดคำขอ:</p>
           <p>ชื่อผู้ขอ: ${userData.user_name}</p>
           <p>อีเมลผู้ขอ: ${userData.user_email}</p>
-          <p>วันที่ส่งคำขอ: ${userData.user_date}</p>
+          <p>วันที่ส่งคำขอ: ${userData.user_date?.toDateString()}</p>
          </div>
          <p>หมายเหตุ:</p>
          <p>${approvalData.remark}</p>
@@ -150,7 +150,7 @@ const switchMessage = async (
           <p>รายละเอียดคำขอ:</p>
           <p>ชื่อผู้ขอ: ${userData.user_name}</p>
           <p>อีเมลผู้ขอ: ${userData.user_email}</p>
-          <p>วันที่ส่งคำขอ: ${userData.user_date}</p>
+          <p>วันที่ส่งคำขอ: ${userData.user_date?.toDateString()}</p>
          </div>
          <p>หมายเหตุ:</p>
          <p>${approvalData.remark}</p>
@@ -188,7 +188,7 @@ const switchMessage = async (
           <p>รายละเอียดคำขอ:</p>
           <p>ชื่อผู้ขอ: ${userData.user_name}</p>
           <p>อีเมลผู้ขอ: ${userData.user_email}</p>
-          <p>วันที่ส่งคำขอ: ${userData.user_date}</p>
+          <p>วันที่ส่งคำขอ: ${userData.user_date?.toDateString()}</p>
          </div>
          <p>หมายเหตุ:</p>
          <p>${approvalData.remark}</p>
