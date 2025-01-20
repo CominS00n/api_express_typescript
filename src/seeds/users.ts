@@ -9,17 +9,33 @@ import { rolePermission } from "../models/role_permissions/role_permissions";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { userRole } from "../models/users/user_roles";
+import fs from "fs";
+
+type User = {
+  id: string;
+  username: string;
+  password: string;
+  name: string;
+  email: string;
+  position: string;
+  company: string;
+  division: string;
+  phone: string;
+};
 
 export const usersSeeds = async () => {
-  const username: string = "administration";
-  const password: string = "qZvy42]eDo42Di.";
-  const name: string = "sitthichai puckpoo";
-  const email: string = "spuckpoo@gmail.com";
-  const position: string = "admin";
-  const company: string = "admin";
-  const division: string = "admin";
-  const hashedPassword: string = await bcrypt.hash(password, 10);
-  const phone = "0812345678";
+  const user_data = fs.readFileSync(
+    "./src/seeds/seed_data/user_seed.json",
+    "utf8"
+  );
+  const parsedData: User[] = JSON.parse(user_data);
+  const hashedUsers = await Promise.all(
+    parsedData.map(async (user) => {
+      user.password = await bcrypt.hash(user.password, 10);
+      return user;
+    })
+  );
+
   // create data for user, role, group, permission
   await db
     .insert(permission)
@@ -46,22 +62,13 @@ export const usersSeeds = async () => {
     .execute();
   const user_result = await db
     .insert(users)
-    .values({
-      username: username,
-      password: hashedPassword,
-      name: name,
-      position: position,
-      company: company,
-      division: division,
-      email: email,
-      phone: phone,
-    })
-    .returning()
+    .values(hashedUsers)
+    .returning({ user_id: users.id })
     .execute();
   const role_result = await db
     .insert(role)
     .values({ name: "super_admin", description: "administrator" })
-    .returning()
+    .returning({ role_id: role.id })
     .execute();
   const group_result = await db
     .insert(group)
@@ -78,19 +85,32 @@ export const usersSeeds = async () => {
   await db
     .insert(rolePermission)
     .values({
-      role_id: role_result[0].id,
+      role_id: role_result[0].role_id,
       permission_id: permissions[0].id,
     })
     .execute();
-  await db
-    .insert(userRole)
-    .values({
-      user_id: user_result[0].id,
-      role_id: role_result[0].id,
+
+  // set user role and user group
+  await Promise.all(
+    user_result.map(async (user) => {
+      return await db
+        .insert(userRole)
+        .values({
+          user_id: user.user_id,
+          role_id: role_result[0].role_id,
+        })
+        .execute();
     })
-    .execute();
-  await db
-    .insert(userGroup)
-    .values({ user_id: user_result[0].id, group_id: group_result[0].id })
-    .execute();
+  );
+  await Promise.all(
+    user_result.map(async (user) => {
+      return await db
+        .insert(userGroup)
+        .values({
+          user_id: user.user_id,
+          group_id: group_result[0].id,
+        })
+        .execute();
+    })
+  );
 };
