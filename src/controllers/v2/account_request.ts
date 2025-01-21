@@ -7,6 +7,7 @@ import { approved } from "../../models/req_acc/approved";
 import { sendMail } from "./send_email";
 
 import { subjectEnum } from "../../types/enum";
+import { ccMail } from "../../middleware/ccMail";
 
 export const account_request_get = async (req: Request, res: Response) => {
   try {
@@ -110,7 +111,13 @@ export const account_request_post = async (req: Request, res: Response) => {
 
     //! Send email
     try {
-      const cc: string = process.env.MAIL_CC || "";
+      const cc: string[] = [];
+      await ccMail().then((res) => {
+        if (res) {
+          cc.push(...res);
+        }
+      });
+
       await sendMail(emailData[0], cc, subjectEnum.REQUEST);
       await sendMail(emailData[0], cc, subjectEnum.WAITING);
 

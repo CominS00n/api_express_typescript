@@ -30,7 +30,7 @@ COPY wait-for-it.sh ./
 RUN npm run build
 
 # Expose the application port
-EXPOSE 8002
+EXPOSE 8000
 
 # Copy entrypoint script and set execute permissions
 COPY entrypoint.sh ./

@@ -12,7 +12,7 @@ const port = Number(process.env.PORT) || 8000;
 
 app.use(express.json());
 app.use(cookieParser());
-const corsOrigin = process.env.CORS_ORIGIN?.split(",") || ["http://localhost:82"];
+const corsOrigin = process.env.CORS_ORIGIN?.split(",") || ["http://localhost:81"];
 app.use(cors({
     origin: corsOrigin,
     credentials: true,

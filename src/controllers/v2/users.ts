@@ -287,10 +287,9 @@ export const users_put = async (req: Request, res: Response) => {
       .from(users)
       .where(eq(users.id, id))
       .execute();
-
     let hashedPassword: string;
-    if (password === oldPassword[0].password) {
-      hashedPassword = password;
+    if (password === "") {
+      hashedPassword = oldPassword[0].password;
     } else {
       hashedPassword = await bcrypt.hash(password, 10);
     }
@@ -307,19 +306,23 @@ export const users_put = async (req: Request, res: Response) => {
       updated_at: new Date(),
     };
     await db.update(users).set(data).where(eq(users.id, id)).execute();
-    const user_role_data = role_id.map((role: string) => ({
-      user_id: id,
-      role_id: role,
-    }));
-    await db.delete(userRole).where(eq(userRole.user_id, id)).execute();
-    await db.insert(userRole).values(user_role_data).execute();
+    if (role_id.length !== 0) {
+      const user_role_data = role_id.map((role: string) => ({
+        user_id: id,
+        role_id: role,
+      }));
+      await db.delete(userRole).where(eq(userRole.user_id, id)).execute();
+      await db.insert(userRole).values(user_role_data).execute();
+    }
 
-    const user_group_data = group_id.map((group: string) => ({
-      user_id: id,
-      group_id: group,
-    }));
-    await db.delete(userGroup).where(eq(userGroup.user_id, id)).execute();
-    await db.insert(userGroup).values(user_group_data).execute();
+    if (group_id.length !== 0) {
+      const user_group_data = group_id.map((group: string) => ({
+        user_id: id,
+        group_id: group,
+      }));
+      await db.delete(userGroup).where(eq(userGroup.user_id, id)).execute();
+      await db.insert(userGroup).values(user_group_data).execute();
+    }
 
     res.status(200).json({ message: "User updated", status: 200 });
   } catch (error) {

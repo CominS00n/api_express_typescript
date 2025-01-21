@@ -7,10 +7,17 @@ import { account_request } from "../../models/req_acc/account_request";
 
 import { sendMail } from "./send_email";
 import { subjectEnum } from "../../types/enum";
+import { ccMail } from "../../middleware/ccMail";
 
-const cc = process.env.MAIL_CC || "";
+// const cc = process.env.MAIL_CC || "";
 
 export const approved_put = async (req: Request, res: Response) => {
+  const cc: string[] = [];
+  await ccMail().then((res) => {
+    if (res) {
+      cc.push(...res);
+    }
+  });
   try {
     const result = req.body;
     const status = result.status as "Pending" | "Approved" | "Rejected";

@@ -19,14 +19,13 @@ const logger = winston.createLogger({
 
 export const sendMail = async (
   data: ApprovalData,
-  cc: string,
+  cc: string[],
   subject: string
 ) => {
   const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    // requireTLS: true,
+    port: parseInt(process.env.MAIL_PORT || "587"),
+    secure: true,
     auth: {
       user: process.env.MAIL_USERNAME,
       pass: process.env.MAIL_PASSWORD,
@@ -41,7 +40,6 @@ export const sendMail = async (
     "supersecret",
     { expiresIn: "24h" }
   );
-  const ccMail = cc.split(",");
   const userRequestData: UserRequestData = await db
     .select({
       user_name: account_request.full_name,
@@ -52,7 +50,7 @@ export const sendMail = async (
     .where(eq(account_request.id, data.acc_req_id))
     .execute()
     .then((res) => res[0]);
-  const message = await createMail(ccMail, subject, data, userRequestData, token);
+  const message = await createMail(cc, subject, data, userRequestData, token);
 
   transporter.sendMail(message, (error, info) => {
     if (error) {

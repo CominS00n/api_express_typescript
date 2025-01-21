@@ -1,22 +1,52 @@
 [
   {
-    "username": "administration",
-    "password": "qZvy42]eDo42Di.",
-    "name": "sitthichai puckpoo",
-    "email": "spuckpoo@gmail.com",
-    "position": "admin",
-    "company": "admin",
-    "division": "admin",
-    "phone": "0812345678"
+    "username": "chatchai.k",
+    "password": "P@ssword1",
+    "name": "chatchai khamchan",
+    "email": "chatchai.k@billone.co.th",
+    "position": "System analyst",
+    "company": "billone",
+    "division": "ทรร.",
+    "phone": "021041280"
+  },
+  {
+    "username": "Thitiworada.n",
+    "password": "P@ssword1",
+    "name": "Thitiworada Nammuntri",
+    "email": "thitiworada.n@billone.co.th",
+    "position": "QA",
+    "company": "billone",
+    "division": "ทรร.",
+    "phone": "021041280"
+  },
+  {
+    "username": "pongkawat",
+    "password": "Abc@12345",
+    "name": "Pongkawat Khohtchaseesawat",
+    "email": "pongkawat.k@ntplc.co.th",
+    "position": "Programmer 6",
+    "company": "NT",
+    "division": "Wireless Realtime Charging",
+    "phone": "0864639011"
+  },
+  {
+    "username": "surassa",
+    "password": "P@ssword1",
+    "name": "Surassa Phadungkhant",
+    "email": "surassa.p@ntplc.co.th",
+    "position": "Engineer 8",
+    "company": "NT",
+    "division": "Wireless Realtime Charging",
+    "phone": "0812320074"
   },
   {
     "username": "administration",
-    "password": "qZvy42]eDo42Di.",
-    "name": "sitthichai puckpoo",
-    "email": "spuckpoo@gmail.com",
-    "position": "admin",
-    "company": "admin",
-    "division": "admin",
-    "phone": "0812345678"
+    "password": "33exZ85bpTBcu1@",
+    "name": "Sitthichapi Puckpoo",
+    "email": "sitthichai.p@billone.co.th",
+    "position": "Programmer",
+    "company": "billone",
+    "division": "ทรร.",
+    "phone": "0938600860"
   }
 ]
