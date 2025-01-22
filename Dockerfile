@@ -13,6 +13,7 @@ WORKDIR /home/node/app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
+COPY .env ./
 
 # Install dependencies as root user
 RUN npm install
