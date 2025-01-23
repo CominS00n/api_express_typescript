@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # รอให้ PostgreSQL พร้อมใช้งาน
-dockerize -wait tcp://localhost:5432 -timeout 60s
+dockerize -wait tcp://postgres:5432 -timeout 60s
 
 # เช็คว่าฐานข้อมูล rct_account มีอยู่หรือไม่
 DB_EXISTS=$(PGPASSWORD=$DB_PASS psql -h $DB_HOST -U $DB_USER -d $DB_NAME -tc "SELECT 1 FROM pg_database WHERE datname = '$DB_NAME'" | tr -d '[:space:]')
